@@ -56,6 +56,13 @@ window.TreeApp = window.TreeApp || {};
     render.renderTree();
   };
 
+  const closePurposeBtn = document.getElementById('closePurposeBtn');
+  if (closePurposeBtn) {
+    closePurposeBtn.onclick = () => {
+      document.getElementById('purposePopup').style.display = 'none';
+    };
+  }
+
   const searchInput = document.getElementById('searchInput');
   searchInput.oninput = () => search.performSearch(searchInput.value);
   document.getElementById('searchClearBtn').onclick = () => { searchInput.value = ''; state.matchIds.clear(); render.renderTree(); };

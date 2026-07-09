@@ -5,6 +5,11 @@
 #app .node-row.drag-over { background: #e0e7ff; outline: 2px dashed #6366f1; }
 #app .node-row.selected { background: #dbeafe; outline: 1px solid #93c5fd; }
 #app .node-row.match { background: #fef08a; }
+#app .node-row .drag-handle { color: #cbd5e1; cursor: grab; font-size: 14px; padding: 0 2px; user-select: none; flex-shrink: 0; opacity: 0; transition: opacity 0.2s; }
+#app .node-row:hover .drag-handle { opacity: 1; }
+@media (hover: none) and (pointer: coarse) {
+  #app .node-row .drag-handle { opacity: 1; }
+}
 #app .node-row .caret { width: 14px; text-align: center; cursor: pointer; color: #9ca3af; font-size: 10px; flex-shrink: 0; }
 #app .node-row .caret.spacer { cursor: default; }
 #app .node-row .icon { width: 18px; text-align: center; transition: transform 0.2s ease; }

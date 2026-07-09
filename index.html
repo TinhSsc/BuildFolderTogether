@@ -129,7 +129,7 @@
       <span class="toolbar-sep"></span>
       <button id="collapseAllBtn">Thu gọn tất cả</button>
       <button id="expandAllBtn">Mở rộng tất cả</button>
-      <button id="compactGitkeepBtn">Ẩn/Hiện .gitkeep</button>
+      <button id="compactGitkeepBtn" data-i18n="btn_compact_gitkeep">Ẩn gitkeep</button>
       <span class="toolbar-sep"></span>
       <button class="btn btn-secondary" id="importToggleBtn" title="Import from Text">Import</button>
       <button class="btn btn-secondary" id="shareTemplateBtn" title="Copy Template Link">🔗 Share</button>
@@ -220,6 +220,15 @@ AIzaSy..."
     </div>
 
     <div class="status" id="status"></div>
+
+    <!-- Purpose Popup -->
+    <div id="purposePopup" class="purpose-popup" style="display:none;">
+      <div class="purpose-header">
+        <strong>Mục đích: </strong><span id="purposeFolderName"></span>
+        <button id="closePurposeBtn">&times;</button>
+      </div>
+      <div class="purpose-content" id="purposeContent"></div>
+    </div>
 
     <div class="export-box" id="exportBox" style="display:none;">
       <textarea id="exportOutput" readonly></textarea>

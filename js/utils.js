@@ -38,15 +38,29 @@ window.TreeApp.utils = {
 
   async shortenUrl(longUrl) {
     if (longUrl.length < 200) return longUrl;
-    try {
-      const response = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(longUrl));
-      if (response.ok) {
-        return await response.text();
-      }
-    } catch (e) {
-      console.warn('Failed to shorten URL, using long URL', e);
-    }
-    return longUrl;
+    return new Promise((resolve) => {
+      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+      window[callbackName] = function(data) {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        if (data && data.shorturl) {
+          resolve(data.shorturl);
+        } else {
+          console.warn('Failed to shorten URL, using long URL');
+          resolve(longUrl);
+        }
+      };
+
+      const script = document.createElement('script');
+      script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}&callback=${callbackName}`;
+      script.onerror = () => {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        console.warn('Failed to shorten URL due to network error');
+        resolve(longUrl);
+      };
+      document.body.appendChild(script);
+    });
   },
 
   async copyShareLink() {

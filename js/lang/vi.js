@@ -17,6 +17,7 @@ window.TreeApp.lang.vi = {
   btn_redo: "↪️ Làm lại",
   btn_collapse_all: "Thu gọn tất cả",
   btn_expand_all: "Mở rộng tất cả",
+  btn_compact_gitkeep: "Ẩn gitkeep",
   btn_import_toggle: "Nhập từ text",
   btn_upload_zip: "Tải ZIP lên",
   btn_export: "Xuất text",

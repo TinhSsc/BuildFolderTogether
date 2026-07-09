@@ -28,6 +28,22 @@ window.TreeApp.render = {
         state.selectedIds = new Set([node.id]);
       }
       this.renderTree();
+      
+      const purposePopup = document.getElementById('purposePopup');
+      if (purposePopup) {
+        if (node.type === 'folder' && state.selectedIds.has(node.id)) {
+          const gitkeep = node.children ? node.children.find(c => c.type === 'gitkeep') : null;
+          if (gitkeep && gitkeep.note) {
+             document.getElementById('purposeFolderName').textContent = node.name;
+             document.getElementById('purposeContent').textContent = gitkeep.note;
+             purposePopup.style.display = 'block';
+          } else {
+             purposePopup.style.display = 'none';
+          }
+        } else if (!e.ctrlKey && !e.metaKey) {
+          purposePopup.style.display = 'none';
+        }
+      }
     });
 
     row.addEventListener('dragstart', (e) => {
@@ -46,6 +62,11 @@ window.TreeApp.render = {
         window.TreeApp.history.mutate(() => treeLogic.moveNode(draggedId, node.id));
       });
     }
+
+    const dragHandle = document.createElement('span');
+    dragHandle.className = 'drag-handle';
+    dragHandle.innerHTML = '&#8942;&#8942;'; // double vertical ellipsis ⋮⋮
+    row.appendChild(dragHandle);
 
     const caret = document.createElement('span');
     caret.className = 'caret' + (node.type === 'folder' ? '' : ' spacer');
@@ -91,22 +112,6 @@ window.TreeApp.render = {
       window.TreeApp.room.broadcastTreeChange();
     };
     inputContainer.appendChild(input);
-
-    if (node.type === 'folder' && state.compactGitkeep && node.children) {
-      const gitkeepChild = node.children.find(c => c.type === 'gitkeep');
-      if (gitkeepChild && gitkeepChild.note) {
-        const noteSpan = document.createElement('span');
-        noteSpan.textContent = ' - ' + gitkeepChild.note;
-        noteSpan.style.color = '#9ca3af';
-        noteSpan.style.fontSize = '13px';
-        noteSpan.style.marginLeft = '8px';
-        noteSpan.style.whiteSpace = 'nowrap';
-        noteSpan.style.overflow = 'hidden';
-        noteSpan.style.textOverflow = 'ellipsis';
-        noteSpan.style.fontStyle = 'italic';
-        inputContainer.appendChild(noteSpan);
-      }
-    }
 
     row.appendChild(inputContainer);
 
@@ -230,6 +235,8 @@ window.TreeApp.render = {
       if (e.target === treeEl && state.selectedIds.size > 0) { 
         state.selectedIds.clear(); 
         this.renderTree(); 
+        const purposePopup = document.getElementById('purposePopup');
+        if (purposePopup) purposePopup.style.display = 'none';
       }
     };
   }

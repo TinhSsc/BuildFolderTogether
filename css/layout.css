@@ -137,3 +137,47 @@
   font-size: 12px;
   color: #94a3b8;
 }
+
+/* Purpose Popup */
+.purpose-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 12px 16px;
+  z-index: 1000;
+  max-width: 320px;
+  border-left: 4px solid #6366f1;
+}
+.purpose-popup .purpose-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #334155;
+}
+.purpose-popup .purpose-header button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #94a3b8;
+  padding: 0;
+}
+.purpose-popup .purpose-content {
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+@media (max-width: 768px) {
+  .purpose-popup {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}

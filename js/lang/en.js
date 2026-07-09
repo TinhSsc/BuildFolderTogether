@@ -17,6 +17,7 @@ window.TreeApp.lang.en = {
   btn_redo: "↪️ Redo",
   btn_collapse_all: "Collapse All",
   btn_expand_all: "Expand All",
+  btn_compact_gitkeep: "Hide gitkeep",
   btn_import_toggle: "Import from text",
   btn_upload_zip: "Upload ZIP",
   btn_export: "Export text",
