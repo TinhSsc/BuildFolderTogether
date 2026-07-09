@@ -124,6 +124,27 @@ window.TreeApp.render = {
       actions.appendChild(noteBtn);
     }
 
+    // Toggle file <-> folder (only for files and empty folders)
+    const canToggle = node.type === 'file' || (node.type === 'folder' && (!node.children || node.children.length === 0));
+    if (canToggle) {
+      const toggleBtn = document.createElement('button');
+      toggleBtn.textContent = node.type === 'folder' ? '📄' : '📁';
+      toggleBtn.title = node.type === 'folder' ? 'Convert to File' : 'Convert to Folder';
+      toggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        window.TreeApp.history.mutate(() => {
+          if (node.type === 'file') {
+            node.type = 'folder';
+            node.children = [];
+          } else {
+            node.type = 'file';
+            delete node.children;
+          }
+        });
+      };
+      actions.appendChild(toggleBtn);
+    }
+
     const del = document.createElement('button');
     del.textContent = '✕';
     del.title = window.TreeApp.i18n.t('title_delete');

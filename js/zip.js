@@ -73,7 +73,11 @@ window.TreeApp.zipLogic = {
     for (let i = 0; i < items.length; i++) {
       const { depth, name, forcedFolder } = items[i];
       const nextDepth = i + 1 < items.length ? items[i + 1].depth : -1;
-      const isFolder = forcedFolder || nextDepth > depth;
+      // Dot-rule: if no children follow, decide by name
+      // Has a dot (and not starts with dot only) → file; no dot → folder
+      const hasChildren = nextDepth > depth;
+      const hasDot = name.includes('.') && name !== '.';
+      const isFolder = forcedFolder || hasChildren || (!hasDot);
 
       const node = {
         id: window.TreeApp.utils.uid(),
