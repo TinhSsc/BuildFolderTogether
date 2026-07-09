@@ -24,6 +24,8 @@ window.TreeApp.lang.vi = {
   import_placeholder: "Dán cây thư mục dạng text vào đây...",
   btn_import_apply: "Áp dụng",
   btn_import_cancel: "Hủy",
+  btn_ai_toggle: "✨ Sinh bằng AI",
+  btn_delete_selected: "🗑️ Xóa đã chọn",
   room_status_offline: "Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.",
   room_input_placeholder: "Dán mã phòng để tham gia...",
   btn_join_room: "Tham gia",
@@ -92,5 +94,13 @@ window.TreeApp.lang.vi = {
   
   switch_lang: "🇺🇸 English",
 
-  footer_about: "<strong>BuildFolderTogether</strong> là công cụ tạo cấu trúc thư mục trực tuyến cho lập trình viên. Thiết kế kiến trúc dự án, chia sẻ theo thời gian thực, và xuất ra file ZIP hoặc cây ASCII."
+  footer_about: "<strong>BuildFolderTogether</strong> là công cụ tạo cấu trúc thư mục trực tuyến cho lập trình viên. Thiết kế kiến trúc, chia sẻ theo thời gian thực và xuất ra tệp ZIP dễ dàng.",
+  
+  ai_err_key_missing: "Thiếu API Key",
+  ai_err_prompt_empty: "Vui lòng nhập yêu cầu",
+  ai_err_network: "Lỗi kết nối đến Gemini API",
+  ai_generating: "Đang nhờ AI vẽ cấu trúc...",
+  ai_success: "Sinh bằng AI thành công!",
+  ai_err_empty: "AI trả về kết quả rỗng hoặc không hợp lệ",
+  delete_empty: "Vui lòng chọn ít nhất một thư mục/file để xóa"
 };

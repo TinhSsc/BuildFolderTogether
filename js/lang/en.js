@@ -24,6 +24,8 @@ window.TreeApp.lang.en = {
   import_placeholder: "Paste text tree structure here...",
   btn_import_apply: "Apply",
   btn_import_cancel: "Cancel",
+  btn_ai_toggle: "✨ AI Generate",
+  btn_delete_selected: "🗑️ Delete",
   room_status_offline: "Not in a room — data is saved locally.",
   room_input_placeholder: "Paste room code to join...",
   btn_join_room: "Join",
@@ -92,5 +94,13 @@ window.TreeApp.lang.en = {
   
   switch_lang: "🇻🇳 Tiếng Việt",
 
-  footer_about: "<strong>BuildFolderTogether</strong> is a collaborative online folder structure builder for developers. Design project architectures, share them instantly, and export to ZIP or ASCII trees."
+  footer_about: "<strong>BuildFolderTogether</strong> is a collaborative online folder structure builder for developers. Design project architectures, share them instantly, and export to ZIP or ASCII trees.",
+  
+  ai_err_key_missing: "API Key required",
+  ai_err_prompt_empty: "Prompt required",
+  ai_err_network: "Failed to connect to Gemini API",
+  ai_generating: "Generating with AI...",
+  ai_success: "AI generated successfully!",
+  ai_err_empty: "AI returned empty or invalid tree",
+  delete_empty: "Please select items to delete"
 };

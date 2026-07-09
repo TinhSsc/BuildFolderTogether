@@ -56,6 +56,14 @@ window.TreeApp = window.TreeApp || {};
   document.addEventListener('keydown', (e) => {
     const tag = (e.target.tagName || '').toLowerCase();
     const isEditable = tag === 'input' || tag === 'textarea';
+    
+    // Delete selected items using Delete or Backspace key
+    if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditable && state.selectedIds.size > 0) {
+      e.preventDefault();
+      treeLogic.deleteSelected();
+      return;
+    }
+
     const ctrl = e.ctrlKey || e.metaKey;
     if (!ctrl) return;
     const key = e.key.toLowerCase();
@@ -97,6 +105,57 @@ window.TreeApp = window.TreeApp || {};
     await storage.save();
     render.renderTree();
     room.startHostListening();
+    history.saveState();
+  };
+  
+  // AI Logic
+  const aiModal = document.getElementById('aiModal');
+  const aiApiKey = document.getElementById('aiApiKey');
+  const aiPrompt = document.getElementById('aiPrompt');
+  
+  if(aiApiKey) { aiApiKey.value = window.TreeApp.ai.getApiKey(); }
+  
+  document.getElementById('aiToggleBtn').onclick = () => { aiModal.style.display = 'flex'; };
+  document.getElementById('aiCancelBtn').onclick = () => { aiModal.style.display = 'none'; };
+  document.getElementById('deleteSelectedBtn').onclick = () => {
+    if (state.selectedIds.size > 0) {
+      treeLogic.deleteSelected();
+    } else {
+      utils.showStatus('Please select items to delete');
+    }
+  };
+  
+  document.getElementById('aiGenerateBtn').onclick = async () => {
+    const key = aiApiKey.value.trim();
+    const prompt = aiPrompt.value.trim();
+    
+    if (!key) { utils.showStatus('API Key required'); return; }
+    if (!prompt) { utils.showStatus('Prompt required'); return; }
+    
+    window.TreeApp.ai.setApiKey(key);
+    utils.showStatus('Generating with AI...');
+    document.getElementById('aiGenerateBtn').disabled = true;
+    
+    try {
+      const asciiTree = await window.TreeApp.ai.generateTree(prompt, key);
+      const parsedTree = window.TreeApp.zipLogic.parseTextTree(asciiTree);
+      if (parsedTree && parsedTree.length > 0) {
+        state.tree = parsedTree;
+        state.selectedIds.clear();
+        state.clipboard = { type: null, nodes: [] };
+        render.renderTree();
+        history.saveState();
+        utils.showStatus('AI generated successfully!');
+        aiModal.style.display = 'none';
+        aiPrompt.value = '';
+      } else {
+        utils.showStatus('AI returned empty or invalid tree');
+      }
+    } catch (err) {
+      utils.showStatus('Error: ' + err.message);
+    } finally {
+      document.getElementById('aiGenerateBtn').disabled = false;
+    }
   };
 
   document.getElementById('joinRoomBtn').onclick = async () => {
