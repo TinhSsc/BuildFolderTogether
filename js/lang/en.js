@@ -26,6 +26,7 @@ window.TreeApp.lang.en = {
   btn_import_cancel: "Cancel",
   btn_ai_toggle: "✨ AI Generate",
   btn_delete_selected: "🗑️ Delete",
+  btn_share_template: "🔗 Share Link",
   room_status_offline: "Not in a room — data is saved locally.",
   room_input_placeholder: "Paste room code to join...",
   btn_join_room: "Join",
@@ -102,5 +103,8 @@ window.TreeApp.lang.en = {
   ai_generating: "Generating with AI...",
   ai_success: "AI generated successfully!",
   ai_err_empty: "AI returned empty or invalid tree",
-  delete_empty: "Please select items to delete"
+  delete_empty: "Please select items to delete",
+  
+  toast_copy_link: "Template link copied to clipboard!",
+  toast_template_loaded: "Template loaded successfully!"
 };

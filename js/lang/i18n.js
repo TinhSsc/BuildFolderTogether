@@ -46,6 +46,7 @@ window.TreeApp.i18n = {
     if(el('collapseAllBtn')) el('collapseAllBtn').textContent = this.t('btn_collapse_all');
     if(el('expandAllBtn')) el('expandAllBtn').textContent = this.t('btn_expand_all');
     if(el('importToggleBtn')) el('importToggleBtn').textContent = this.t('btn_import_toggle');
+    if(el('shareTemplateBtn')) el('shareTemplateBtn').textContent = this.t('btn_share_template');
     if(el('aiToggleBtn')) el('aiToggleBtn').textContent = this.t('btn_ai_toggle');
     if(el('deleteSelectedBtn')) el('deleteSelectedBtn').innerHTML = this.t('btn_delete_selected');
     if(el('uploadZipBtn')) el('uploadZipBtn').textContent = this.t('btn_upload_zip');

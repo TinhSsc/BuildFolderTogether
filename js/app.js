@@ -188,6 +188,23 @@ window.TreeApp = window.TreeApp || {};
     }
   };
 
+  document.getElementById('shareTemplateBtn').onclick = () => {
+    if (!state.tree || state.tree.length === 0) {
+      utils.showStatus(window.TreeApp.i18n.t('export_empty') || 'Tree is empty');
+      return;
+    }
+    try {
+      const encoded = window.TreeApp.share.encodeTree(state.tree);
+      const url = new URL(window.location.href);
+      url.searchParams.set('t', encoded);
+      navigator.clipboard.writeText(url.toString()).then(() => {
+        utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Template link copied to clipboard!');
+      });
+    } catch(e) {
+      utils.showStatus('Error copying link');
+    }
+  };
+
   document.getElementById('joinRoomBtn').onclick = async () => {
     const val = elements.roomInput.value.trim();
     if (!val) { utils.showStatus(window.TreeApp.i18n.t('room_need_id')); return; }
@@ -215,19 +232,46 @@ window.TreeApp = window.TreeApp || {};
     if (window.TreeApp.utils.updateStatusBar) window.TreeApp.utils.updateStatusBar();
     
     let startRoomId = null;
+    let templateHash = null;
     try {
       const params = new URLSearchParams(window.location.search);
       startRoomId = params.get('room');
+      templateHash = params.get('t');
     } catch (e) { /* ignore */ }
 
-    if (startRoomId) {
+    if (templateHash) {
+      // Priority 1: Load template from URL
+      const loadedTree = window.TreeApp.share.decodeTree(templateHash);
+      if (loadedTree.length > 0) {
+        state.tree = loadedTree;
+        state.roomId = null;
+        elements.roomInput.value = '';
+        utils.updateShareLinkVisibility();
+        render.renderTree();
+        history.saveState();
+        utils.showStatus(window.TreeApp.i18n.t('toast_template_loaded') || 'Template loaded successfully!');
+      } else {
+        utils.showStatus('Invalid template link');
+      }
+      
+      // Clean up URL
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('t');
+        window.history.replaceState({}, document.title, url.toString());
+      } catch(e) {}
+    } 
+    else if (startRoomId) {
+      // Priority 2: Join room
       elements.roomInput.value = startRoomId;
       state.roomId = startRoomId;
       utils.updateShareLinkVisibility();
       await storage.load();
       render.renderTree();
       await room.becomeGuestAndConnect(startRoomId);
-    } else {
+    } 
+    else {
+      // Priority 3: Load local storage
       await storage.load();
       render.renderTree();
     }

@@ -26,6 +26,7 @@ window.TreeApp.lang.vi = {
   btn_import_cancel: "Hủy",
   btn_ai_toggle: "✨ Sinh bằng AI",
   btn_delete_selected: "🗑️ Xóa đã chọn",
+  btn_share_template: "🔗 Copy Link Mẫu",
   room_status_offline: "Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.",
   room_input_placeholder: "Dán mã phòng để tham gia...",
   btn_join_room: "Tham gia",
@@ -102,5 +103,8 @@ window.TreeApp.lang.vi = {
   ai_generating: "Đang nhờ AI vẽ cấu trúc...",
   ai_success: "Sinh bằng AI thành công!",
   ai_err_empty: "AI trả về kết quả rỗng hoặc không hợp lệ",
-  delete_empty: "Vui lòng chọn ít nhất một thư mục/file để xóa"
+  delete_empty: "Vui lòng chọn ít nhất một thư mục/file để xóa",
+  
+  toast_copy_link: "Đã copy link chia sẻ vào bộ nhớ đệm!",
+  toast_template_loaded: "Đã tải cấu trúc mẫu thành công!"
 };

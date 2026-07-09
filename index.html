@@ -88,20 +88,25 @@
   </div>
 
   <div id="app" style="position:relative;">
-    <div class="app-header-row" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 12px;">
+    <div class="app-header-row"
+      style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 12px;">
       <div class="app-header-left">
         <h1 id="titleText" style="margin-top: 0; margin-bottom: 5px;">Cấu trúc thư mục Clean Architecture</h1>
-        <div class="hint" id="hintText" style="margin-bottom: 0;">Kéo thả để di chuyển. Click chọn, Ctrl/Cmd+click chọn nhiều, chuột phải để mở menu. Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản.</div>
+        <div class="hint" id="hintText" style="margin-bottom: 0;">Kéo thả để di chuyển. Click chọn, Ctrl/Cmd+click chọn
+          nhiều, chuột phải để mở menu. Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản.</div>
       </div>
       <div class="app-header-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-        <button id="switchLangBtn" style="padding:6px 12px; border-radius:8px; border:1px solid #d1d5db; background:#fff; cursor:pointer; font-size:12px;">🇺🇸 English</button>
-        <div class="room-bar" style="margin-bottom: 0;">
-          <span id="roomStatus">Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.</span>
-          <input id="roomInput" placeholder="Dán mã phòng để tham gia..." />
-          <button id="joinRoomBtn">Tham gia</button>
-          <button id="createRoomBtn">Tạo phòng mới</button>
-          <button id="shareLinkBtn" style="display:none;">🔗 Chia sẻ liên kết</button>
-        </div>
+        <button id="switchLangBtn"
+          style="padding:6px 12px; border-radius:8px; border:1px solid #d1d5db; background:#fff; cursor:pointer; font-size:12px;">🇺🇸
+          English</button>
+
+      </div>
+      <div class="room-bar" style="margin-bottom: 0;">
+        <span id="roomStatus">Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.</span>
+        <input id="roomInput" placeholder="Dán mã phòng để tham gia..." />
+        <button id="joinRoomBtn">Tham gia</button>
+        <button id="createRoomBtn">Tạo phòng mới</button>
+        <button id="shareLinkBtn" style="display:none;">🔗 Chia sẻ liên kết</button>
       </div>
     </div>
 
@@ -125,6 +130,7 @@
       <button id="expandAllBtn">Mở rộng tất cả</button>
       <span class="toolbar-sep"></span>
       <button class="btn btn-secondary" id="importToggleBtn" title="Import from Text">Import</button>
+      <button class="btn btn-secondary" id="shareTemplateBtn" title="Copy Template Link">🔗 Share</button>
       <button class="btn btn-secondary" id="aiToggleBtn" title="Generate with AI"
         style="background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none;">✨ AI
         Generate</button>
@@ -284,6 +290,7 @@
   <script src="js/render.js"></script>
   <script src="js/room.js"></script>
   <script src="js/ai.js"></script>
+  <script src="js/share.js"></script>
   <script src="js/zip.js"></script>
   <script src="js/app.js"></script>
 </body>
