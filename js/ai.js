@@ -32,7 +32,18 @@ window.TreeApp.ai = {
 You must output ONLY an ASCII directory tree representing the folder structure.
 Do NOT include any explanations, greetings, or markdown code blocks (like \`\`\` or \`\`\`bash).
 Use standard ASCII tree characters: ├──, └──, │, and spaces.
-Folders must NOT end with a trailing slash (/). We infer folder types automatically if they have children, but you can add a trailing slash if it's empty to be safe.`,
+Folders must NOT end with a trailing slash (/).
+
+IMPORTANT RULE for .gitkeep files:
+- Use .gitkeep to keep empty folders tracked in Git.
+- Write the PURPOSE of the empty folder as an inline comment on the same line.
+- Format: .gitkeep # <purpose of this empty folder>
+- Example:
+    ├── Scenes
+    │   └── .gitkeep # Holds initial Unity scenes; populated at runtime
+    ├── logs
+    │   └── .gitkeep # Stores runtime log files; ignored by Git except this marker
+- ALWAYS add a # comment for every .gitkeep to explain what the folder is for.`,
 
   // Single Gemini call with a specific key
   async _callGemini(prompt, key) {

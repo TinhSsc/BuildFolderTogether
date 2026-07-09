@@ -59,11 +59,16 @@ window.TreeApp.zipLogic = {
       // Strip trailing slash (we'll detect folder status by children)
       const forcedFolder = name.endsWith('/');
       if (forcedFolder) name = name.slice(0, -1);
-      // Strip inline comments
-      name = name.replace(/\s+#.*$/, '').trim();
+      // Extract inline comment (e.g. ".gitkeep # purpose") - save as note for gitkeep
+      let inlineNote = '';
+      const commentMatch = name.match(/^(.+?)\s+#\s+(.+)$/);
+      if (commentMatch) {
+        name = commentMatch[1].trim();
+        inlineNote = commentMatch[2].trim();
+      }
       if (!name) continue;
 
-      items.push({ depth, name, forcedFolder });
+      items.push({ depth, name, forcedFolder, inlineNote });
     }
 
     // Pass 2: build tree — a node is a folder if the NEXT item has depth > current depth
@@ -71,7 +76,7 @@ window.TreeApp.zipLogic = {
     const stack = []; // { depth, node }
 
     for (let i = 0; i < items.length; i++) {
-      const { depth, name, forcedFolder } = items[i];
+      const { depth, name, forcedFolder, inlineNote } = items[i];
       const nextDepth = i + 1 < items.length ? items[i + 1].depth : -1;
       // Dot-rule: if no children follow, decide by name
       // Has a dot (and not starts with dot only) → file; no dot → folder
@@ -85,7 +90,7 @@ window.TreeApp.zipLogic = {
         type: name === '.gitkeep' ? 'gitkeep' : (isFolder ? 'folder' : 'file')
       };
       if (isFolder) node.children = [];
-      if (node.type === 'gitkeep') node.note = '';
+      if (node.type === 'gitkeep') node.note = inlineNote || '';
 
       // Pop stack until we find the correct parent depth
       while (stack.length && stack[stack.length - 1].depth >= depth) stack.pop();
