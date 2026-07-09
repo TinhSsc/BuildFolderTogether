@@ -106,5 +106,7 @@ window.TreeApp.lang.vi = {
   delete_empty: "Vui lòng chọn ít nhất một thư mục/file để xóa",
   
   toast_copy_link: "Đã copy link chia sẻ vào bộ nhớ đệm!",
-  toast_template_loaded: "Đã tải cấu trúc mẫu thành công!"
+  toast_template_loaded: "Đã tải cấu trúc mẫu thành công!",
+  creating_link: "Đang tạo link rút gọn...",
+  link_copied_short: "Đã chép link rút gọn!"
 };

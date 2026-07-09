@@ -106,5 +106,7 @@ window.TreeApp.lang.en = {
   delete_empty: "Please select items to delete",
   
   toast_copy_link: "Template link copied to clipboard!",
-  toast_template_loaded: "Template loaded successfully!"
+  toast_template_loaded: "Template loaded successfully!",
+  creating_link: "Creating short link...",
+  link_copied_short: "Copied short link!"
 };

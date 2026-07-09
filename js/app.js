@@ -48,6 +48,13 @@ window.TreeApp = window.TreeApp || {};
   
   document.getElementById('collapseAllBtn').onclick = () => { state.collapsedIds = new Set(treeLogic.collectFolderIds(state.tree, [])); render.renderTree(); };
   document.getElementById('expandAllBtn').onclick = () => { state.collapsedIds.clear(); render.renderTree(); };
+  document.getElementById('compactGitkeepBtn').onclick = () => {
+    state.compactGitkeep = !state.compactGitkeep;
+    const btn = document.getElementById('compactGitkeepBtn');
+    if (state.compactGitkeep) btn.classList.add('active');
+    else btn.classList.remove('active');
+    render.renderTree();
+  };
 
   const searchInput = document.getElementById('searchInput');
   searchInput.oninput = () => search.performSearch(searchInput.value);
@@ -260,7 +267,7 @@ window.TreeApp = window.TreeApp || {};
     }
   };
 
-  document.getElementById('shareTemplateBtn').onclick = () => {
+  document.getElementById('shareTemplateBtn').onclick = async () => {
     if (!state.tree || state.tree.length === 0) {
       utils.showStatus(window.TreeApp.i18n.t('export_empty') || 'Tree is empty');
       return;
@@ -269,11 +276,19 @@ window.TreeApp = window.TreeApp || {};
       const encoded = window.TreeApp.share.encodeTree(state.tree);
       const url = new URL(window.location.href);
       url.searchParams.set('t', encoded);
-      navigator.clipboard.writeText(url.toString()).then(() => {
-        utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Template link copied to clipboard!');
-      });
+      
+      utils.showStatus(window.TreeApp.i18n.t('creating_link') || 'Đang tạo link rút gọn...');
+      const originalUrl = url.toString();
+      const finalUrl = await utils.shortenUrl(originalUrl);
+      
+      await navigator.clipboard.writeText(finalUrl);
+      if (finalUrl !== originalUrl) {
+        utils.showStatus(window.TreeApp.i18n.t('link_copied_short') || 'Đã chép link rút gọn!');
+      } else {
+        utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Đã chép link!');
+      }
     } catch(e) {
-      utils.showStatus('Error copying link');
+      utils.showStatus('Lỗi khi chép link');
     }
   };
 

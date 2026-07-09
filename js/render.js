@@ -66,6 +66,9 @@ window.TreeApp.render = {
     icon.textContent = node.type === 'folder' ? '📁' : (node.type === 'gitkeep' ? '📌' : '📄');
     row.appendChild(icon);
 
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'name-input-container';
+
     const input = document.createElement('input');
     input.className = 'name-input';
     input.value = node.name;
@@ -87,7 +90,25 @@ window.TreeApp.render = {
       window.TreeApp.storage.save();
       window.TreeApp.room.broadcastTreeChange();
     };
-    row.appendChild(input);
+    inputContainer.appendChild(input);
+
+    if (node.type === 'folder' && state.compactGitkeep && node.children) {
+      const gitkeepChild = node.children.find(c => c.type === 'gitkeep');
+      if (gitkeepChild && gitkeepChild.note) {
+        const noteSpan = document.createElement('span');
+        noteSpan.textContent = ' - ' + gitkeepChild.note;
+        noteSpan.style.color = '#9ca3af';
+        noteSpan.style.fontSize = '13px';
+        noteSpan.style.marginLeft = '8px';
+        noteSpan.style.whiteSpace = 'nowrap';
+        noteSpan.style.overflow = 'hidden';
+        noteSpan.style.textOverflow = 'ellipsis';
+        noteSpan.style.fontStyle = 'italic';
+        inputContainer.appendChild(noteSpan);
+      }
+    }
+
+    row.appendChild(inputContainer);
 
     const actions = document.createElement('span');
     actions.className = 'actions';
@@ -169,7 +190,11 @@ window.TreeApp.render = {
     if (node.type === 'folder' && !state.collapsedIds.has(node.id)) {
       const childrenEl = document.createElement('div');
       childrenEl.className = 'children';
-      node.children.forEach(child => childrenEl.appendChild(this.renderNode(child)));
+      let childrenToRender = node.children;
+      if (state.compactGitkeep) {
+        childrenToRender = node.children.filter(c => c.type !== 'gitkeep');
+      }
+      childrenToRender.forEach(child => childrenEl.appendChild(this.renderNode(child)));
       wrap.appendChild(childrenEl);
     }
 

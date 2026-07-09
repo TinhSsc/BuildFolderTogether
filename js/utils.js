@@ -36,6 +36,19 @@ window.TreeApp.utils = {
     } catch (e) { /* ignore if not permitted in this environment */ }
   },
 
+  async shortenUrl(longUrl) {
+    if (longUrl.length < 200) return longUrl;
+    try {
+      const response = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(longUrl));
+      if (response.ok) {
+        return await response.text();
+      }
+    } catch (e) {
+      console.warn('Failed to shorten URL, using long URL', e);
+    }
+    return longUrl;
+  },
+
   async copyShareLink() {
     if (!window.TreeApp.state.roomId) return;
     let link;
@@ -47,13 +60,19 @@ window.TreeApp.utils = {
       link = window.TreeApp.state.roomId;
     }
     try {
-      await navigator.clipboard.writeText(link);
-      window.TreeApp.utils.showStatus(window.TreeApp.i18n.t('link_copied'));
+      window.TreeApp.utils.showStatus(window.TreeApp.i18n.t('creating_link') || 'Đang tạo link rút gọn...');
+      const finalLink = await this.shortenUrl(link);
+      await navigator.clipboard.writeText(finalLink);
+      if (finalLink !== link) {
+        window.TreeApp.utils.showStatus(window.TreeApp.i18n.t('link_copied_short') || 'Đã chép link rút gọn!');
+      } else {
+        window.TreeApp.utils.showStatus(window.TreeApp.i18n.t('link_copied') || 'Đã chép link!');
+      }
     } catch (e) {
       const roomInput = window.TreeApp.elements.roomInput;
       roomInput.value = link;
       roomInput.select();
-      window.TreeApp.utils.showStatus(window.TreeApp.i18n.t('link_copy_failed'));
+      window.TreeApp.utils.showStatus(window.TreeApp.i18n.t('link_copy_failed') || 'Lỗi khi chép link');
     }
   },
 

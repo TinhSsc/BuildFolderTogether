@@ -11,6 +11,7 @@ window.TreeApp.state = {
   collapsedIds: new Set(),
   matchIds: new Set(),
   activeContextMenu: null,
+  compactGitkeep: false,
 
   // P2P (WebRTC) state
   role: null, // 'host' | 'guest' | null
