@@ -9,7 +9,7 @@
 <!-- Screenshot can be placed here if available -->
 
 ## Demo
-Live Demo: [https://buildfoldertogether.com](https://buildfoldertogether.com)
+Live Demo: [https://build-folder-together.vercel.app](https://build-folder-together.vercel.app)
 
 ## Table of Contents
 - [Introduction](#introduction)
