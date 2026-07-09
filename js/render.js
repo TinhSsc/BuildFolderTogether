@@ -2,6 +2,24 @@
 window.TreeApp = window.TreeApp || {};
 
 window.TreeApp.render = {
+  getFileIcon(name) {
+    name = name.toLowerCase();
+    if (name.endsWith('.js') || name.endsWith('.jsx')) return '<i class="bx bxl-javascript" style="color: #f7df1e;"></i>';
+    if (name.endsWith('.ts') || name.endsWith('.tsx')) return '<i class="bx bxl-typescript" style="color: #3178c6;"></i>';
+    if (name.endsWith('.html')) return '<i class="bx bxl-html5" style="color: #e34f26;"></i>';
+    if (name.endsWith('.css')) return '<i class="bx bxl-css3" style="color: #1572b6;"></i>';
+    if (name.endsWith('.json')) return '<i class="bx bxs-file-json" style="color: #8b5cf6;"></i>';
+    if (name.endsWith('.md')) return '<i class="bx bxl-markdown" style="color: #000000;"></i>';
+    if (name.endsWith('.py')) return '<i class="bx bxl-python" style="color: #3776ab;"></i>';
+    if (name.endsWith('.java')) return '<i class="bx bxl-java" style="color: #b07219;"></i>';
+    if (name.endsWith('.php')) return '<i class="bx bxl-php" style="color: #777bb4;"></i>';
+    if (name.endsWith('.go')) return '<i class="bx bxl-go" style="color: #00add8;"></i>';
+    if (name.endsWith('.svg') || name.endsWith('.png') || name.endsWith('.jpg')) return '<i class="bx bx-image" style="color: #10b981;"></i>';
+    if (name === 'dockerfile' || name === 'docker-compose.yml') return '<i class="bx bxl-docker" style="color: #2496ed;"></i>';
+    if (name === '.gitignore') return '<i class="bx bxl-git" style="color: #f14e32;"></i>';
+    return '<i class="bx bx-file-blank" style="color: #94a3b8;"></i>';
+  },
+
   renderNode(node) {
     const state = window.TreeApp.state;
     const treeLogic = window.TreeApp.treeLogic;
@@ -50,7 +68,8 @@ window.TreeApp.render = {
     const caret = document.createElement('span');
     caret.className = 'caret' + (node.type === 'folder' ? '' : ' spacer');
     if (node.type === 'folder') {
-      caret.textContent = state.collapsedIds.has(node.id) ? '▶' : '▼';
+      if (!state.collapsedIds.has(node.id)) caret.classList.add('expanded');
+      caret.innerHTML = "<i class='bx bx-chevron-right'></i>";
       caret.onclick = (e) => {
         e.stopPropagation();
         if (state.collapsedIds.has(node.id)) state.collapsedIds.delete(node.id); else state.collapsedIds.add(node.id);
@@ -62,8 +81,10 @@ window.TreeApp.render = {
     row.appendChild(caret);
 
     const icon = document.createElement('span');
-    icon.className = 'icon';
-    icon.textContent = node.type === 'folder' ? '📁' : (node.type === 'gitkeep' ? '📌' : '📄');
+    icon.className = 'icon' + (node.type === 'folder' ? ' folder' : '');
+    icon.innerHTML = node.type === 'folder' 
+      ? (state.collapsedIds.has(node.id) ? "<i class='bx bxs-folder'></i>" : "<i class='bx bxs-folder-open'></i>") 
+      : (node.type === 'gitkeep' ? "<i class='bx bx-pin' style='color:#ef4444'></i>" : this.getFileIcon(node.name));
     row.appendChild(icon);
 
     const input = document.createElement('input');
@@ -94,19 +115,19 @@ window.TreeApp.render = {
 
     if (node.type === 'folder') {
       const addF = document.createElement('button');
-      addF.textContent = '+📁';
+      addF.innerHTML = "<i class='bx bx-folder-plus'></i>";
       addF.title = window.TreeApp.i18n.t('title_add_folder');
       addF.onclick = () => { window.TreeApp.history.mutate(() => treeLogic.addNode(node.children, 'folder')); };
       actions.appendChild(addF);
 
       const addFile = document.createElement('button');
-      addFile.textContent = '+📄';
+      addFile.innerHTML = "<i class='bx bx-file-plus'></i>";
       addFile.title = window.TreeApp.i18n.t('title_add_file');
       addFile.onclick = () => { window.TreeApp.history.mutate(() => treeLogic.addNode(node.children, 'file')); };
       actions.appendChild(addFile);
 
       const addGitkeep = document.createElement('button');
-      addGitkeep.textContent = '+.gitkeep';
+      addGitkeep.innerHTML = "<i class='bx bx-pin'></i>";
       addGitkeep.title = window.TreeApp.i18n.t('title_add_gitkeep');
       addGitkeep.onclick = () => {
         window.TreeApp.history.mutate(() => { 
@@ -118,14 +139,14 @@ window.TreeApp.render = {
 
     if (node.type === 'gitkeep') {
       const noteBtn = document.createElement('button');
-      noteBtn.textContent = '📝';
+      noteBtn.innerHTML = "<i class='bx bx-edit'></i>";
       noteBtn.title = window.TreeApp.i18n.t('title_note_gitkeep');
       noteBtn.onclick = () => { node._noteOpen = !node._noteOpen; this.renderTree(); };
       actions.appendChild(noteBtn);
     }
 
     const del = document.createElement('button');
-    del.textContent = '✕';
+    del.innerHTML = "<i class='bx bx-trash'></i>";
     del.title = window.TreeApp.i18n.t('title_delete');
     del.onclick = () => { window.TreeApp.history.mutate(() => treeLogic.deleteNode(node.id)); };
     actions.appendChild(del);

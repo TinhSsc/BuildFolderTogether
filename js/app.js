@@ -5,6 +5,53 @@ window.TreeApp = window.TreeApp || {};
   const { state, elements, utils, treeLogic, history, render, search, room, zipLogic, storage } = window.TreeApp;
 
   // Bind UI Events
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  const themeToggleText = document.getElementById('themeToggleText');
+  const appContainer = document.getElementById('app');
+  
+  const currentTheme = localStorage.getItem('buildfolder_theme') || 'dark';
+  document.body.setAttribute('data-theme', currentTheme); // For scrollbars etc
+  appContainer.setAttribute('data-theme', currentTheme);
+  if(themeToggleText) themeToggleText.textContent = currentTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+  
+  if(themeToggleBtn) {
+    themeToggleBtn.onclick = () => {
+      const newTheme = appContainer.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      appContainer.setAttribute('data-theme', newTheme);
+      localStorage.setItem('buildfolder_theme', newTheme);
+      themeToggleText.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+    };
+  }
+
+  // Templates Logic
+  const templatesToggleBtn = document.getElementById('templatesToggleBtn');
+  const templatesBox = document.getElementById('templatesBox');
+  const templatesCloseBtn = document.getElementById('templatesCloseBtn');
+  const templatesList = document.getElementById('templatesList');
+  
+  if(templatesToggleBtn) {
+    templatesToggleBtn.onclick = () => {
+      templatesList.innerHTML = '';
+      window.TreeApp.templates.forEach(tpl => {
+        const card = document.createElement('div');
+        card.style.cssText = 'padding: 16px; background: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s;';
+        card.innerHTML = `<i class='bx ${tpl.icon}' style='font-size: 24px; color: ${tpl.color}; margin-bottom: 8px; display: block;'></i><h4 style="margin: 0 0 4px 0; font-size: 14px;">${tpl.name}</h4><p style="margin: 0; font-size: 12px; color: var(--text-muted);">${tpl.description}</p>`;
+        card.onmouseover = () => card.style.borderColor = 'var(--primary)';
+        card.onmouseout = () => card.style.borderColor = 'var(--border-color)';
+        card.onclick = () => {
+          window.TreeApp.templates.applyTemplate(tpl.id);
+          render.renderTree();
+          history.saveState();
+          templatesBox.style.display = 'none';
+        };
+        templatesList.appendChild(card);
+      });
+      templatesBox.style.display = 'flex';
+    };
+  }
+  if(templatesCloseBtn) templatesCloseBtn.onclick = () => { templatesBox.style.display = 'none'; };
+
   document.getElementById('addRootFolder').onclick = () => { history.mutate(() => treeLogic.addNode(state.tree, 'folder')); };
   document.getElementById('addRootFile').onclick = () => { history.mutate(() => treeLogic.addNode(state.tree, 'file')); };
   
@@ -78,7 +125,7 @@ window.TreeApp = window.TreeApp || {};
   const importBox = document.getElementById('importBox');
   const importInput = document.getElementById('importInput');
   document.getElementById('importToggleBtn').onclick = () => {
-    importBox.style.display = importBox.style.display === 'none' ? 'block' : 'none';
+    importBox.style.display = importBox.style.display === 'none' ? 'flex' : 'none';
   };
   document.getElementById('importCancelBtn').onclick = () => { importBox.style.display = 'none'; };
   document.getElementById('importApplyBtn').onclick = () => {
@@ -134,7 +181,7 @@ window.TreeApp = window.TreeApp || {};
     aiProvider.dispatchEvent(new Event('change'));
   }
   
-  document.getElementById('aiToggleBtn').onclick = () => { aiBox.style.display = aiBox.style.display === 'none' ? 'block' : 'none'; };
+  document.getElementById('aiToggleBtn').onclick = () => { aiBox.style.display = aiBox.style.display === 'none' ? 'flex' : 'none'; };
   document.getElementById('aiCancelBtn').onclick = () => { aiBox.style.display = 'none'; };
   
   document.getElementById('aiToggleKeyBtn').onclick = () => {
