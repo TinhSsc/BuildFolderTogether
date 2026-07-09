@@ -109,14 +109,20 @@ window.TreeApp = window.TreeApp || {};
   };
   
   // AI Logic
-  const aiModal = document.getElementById('aiModal');
+  const aiBox = document.getElementById('aiBox');
   const aiApiKey = document.getElementById('aiApiKey');
   const aiPrompt = document.getElementById('aiPrompt');
+  const aiKeySection = document.getElementById('aiKeySection');
   
   if(aiApiKey) { aiApiKey.value = window.TreeApp.ai.getApiKey(); }
   
-  document.getElementById('aiToggleBtn').onclick = () => { aiModal.style.display = 'flex'; };
-  document.getElementById('aiCancelBtn').onclick = () => { aiModal.style.display = 'none'; };
+  document.getElementById('aiToggleBtn').onclick = () => { aiBox.style.display = aiBox.style.display === 'none' ? 'block' : 'none'; };
+  document.getElementById('aiCancelBtn').onclick = () => { aiBox.style.display = 'none'; };
+  
+  document.getElementById('aiToggleKeyBtn').onclick = () => {
+    aiKeySection.style.display = aiKeySection.style.display === 'none' ? 'block' : 'none';
+  };
+  
   document.getElementById('deleteSelectedBtn').onclick = () => {
     if (state.selectedIds.size > 0) {
       treeLogic.deleteSelected();
@@ -129,7 +135,12 @@ window.TreeApp = window.TreeApp || {};
     const key = aiApiKey.value.trim();
     const prompt = aiPrompt.value.trim();
     
-    if (!key) { utils.showStatus('API Key required'); return; }
+    if (!key) { 
+      utils.showStatus('API Key required'); 
+      aiKeySection.style.display = 'block';
+      aiApiKey.focus();
+      return; 
+    }
     if (!prompt) { utils.showStatus('Prompt required'); return; }
     
     window.TreeApp.ai.setApiKey(key);
@@ -146,7 +157,7 @@ window.TreeApp = window.TreeApp || {};
         render.renderTree();
         history.saveState();
         utils.showStatus('AI generated successfully!');
-        aiModal.style.display = 'none';
+        aiBox.style.display = 'none';
         aiPrompt.value = '';
       } else {
         utils.showStatus('AI returned empty or invalid tree');
