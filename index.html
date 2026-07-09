@@ -34,9 +34,6 @@
   <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
 
-  <!-- Boxicons -->
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
   <!-- Google Search Console Verification -->
   <meta name="google-site-verification" content="4QOZrNsZO182PpCsQ1ivYSVN2D0xG5krqAczoU-vBMQ" />
 
@@ -76,178 +73,200 @@
   <link rel="stylesheet" href="css/context-menu.css">
 </head>
 
-<body class="modern-theme" data-theme="dark">
-
-  <div class="app-layout" id="app">
-    <!-- Sidebar -->
-    <aside class="app-sidebar">
-      <div class="sidebar-header">
-        <i class='bx bx-folder-open logo-icon'></i>
-        <h2>BuildFolder</h2>
-      </div>
-      
-      <div class="sidebar-menu">
-        <button id="themeToggleBtn" class="menu-btn"><i class='bx bx-moon'></i> <span id="themeToggleText">Dark Mode</span></button>
-        <button id="switchLangBtn" class="menu-btn"><i class='bx bx-globe'></i> <span>🇺🇸 English</span></button>
-        <div class="menu-divider"></div>
-        <button id="templatesToggleBtn" class="menu-btn"><i class='bx bx-layout'></i> <span>Templates</span></button>
-        <button id="aiToggleBtn" class="menu-btn gradient-text"><i class='bx bx-bot'></i> <span>AI Generate</span></button>
-        <button id="importToggleBtn" class="menu-btn"><i class='bx bx-import'></i> <span>Import ASCII</span></button>
-      </div>
-      
-      <div class="sidebar-bottom">
-        <div class="room-panel">
-          <h4>Collaboration</h4>
-          <span id="roomStatus" class="room-status-badge"><i class='bx bx-radio-circle-marked'></i> Offline</span>
-          <div class="room-actions">
-            <input id="roomInput" placeholder="Room Code..." />
-            <button id="joinRoomBtn" class="btn-sm">Join</button>
-          </div>
-          <button id="createRoomBtn" class="btn-sm primary-sm">Create New Room</button>
-          <button id="shareLinkBtn" class="btn-sm" style="display:none;"><i class='bx bx-share-alt'></i> Share Link</button>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main Workspace -->
-    <main class="app-main">
-      <header class="app-header">
-        <div class="header-left">
-          <h1 id="titleText">Project Architecture</h1>
-          <span class="hint" id="hintText">Drag & drop, Ctrl+Click to multi-select, Right-click for menu</span>
-        </div>
-        <div class="header-right">
-          <div class="search-box">
-            <i class='bx bx-search'></i>
-            <input id="searchInput" placeholder="Search files/folders..." />
-            <button id="searchClearBtn"><i class='bx bx-x'></i></button>
-          </div>
-        </div>
-      </header>
-
-      <!-- Floating Command Bar -->
-      <div class="command-bar">
-        <div class="cmd-group">
-          <button id="addRootFolder" class="cmd-btn" title="Add Folder"><i class='bx bx-folder-plus'></i> <span>Folder</span></button>
-          <button id="addRootFile" class="cmd-btn" title="Add File"><i class='bx bx-file-plus'></i> <span>File</span></button>
-        </div>
-        <div class="cmd-sep"></div>
-        <div class="cmd-group">
-          <button id="cutBtn" class="cmd-btn icon-only" title="Cut (Ctrl+X)"><i class='bx bx-cut'></i></button>
-          <button id="copyBtn" class="cmd-btn icon-only" title="Copy (Ctrl+C)"><i class='bx bx-copy'></i></button>
-          <button id="pasteBtn" class="cmd-btn icon-only" title="Paste (Ctrl+V)"><i class='bx bx-paste'></i></button>
-          <button id="duplicateBtn" class="cmd-btn icon-only" title="Duplicate (Ctrl+D)"><i class='bx bx-copy-alt'></i></button>
-          <button id="deleteSelectedBtn" class="cmd-btn icon-only danger" title="Delete"><i class='bx bx-trash'></i></button>
-        </div>
-        <div class="cmd-sep"></div>
-        <div class="cmd-group">
-          <button id="undoBtn" class="cmd-btn icon-only" title="Undo (Ctrl+Z)"><i class='bx bx-undo'></i></button>
-          <button id="redoBtn" class="cmd-btn icon-only" title="Redo (Ctrl+Y)"><i class='bx bx-redo'></i></button>
-        </div>
-        <div class="cmd-sep"></div>
-        <div class="cmd-group">
-          <button id="collapseAllBtn" class="cmd-btn icon-only" title="Collapse All"><i class='bx bx-collapse-vertical'></i></button>
-          <button id="expandAllBtn" class="cmd-btn icon-only" title="Expand All"><i class='bx bx-expand-vertical'></i></button>
-        </div>
-        <div class="cmd-sep"></div>
-        <div class="cmd-group">
-          <button id="exportBtn" class="cmd-btn" title="Export ASCII"><i class='bx bx-export'></i></button>
-          <button id="uploadZipBtn" class="cmd-btn" title="Upload ZIP"><i class='bx bxs-file-archive'></i></button>
-          <input type="file" id="zipFileInput" accept=".zip" style="display:none" />
-          <button id="zipBtn" class="cmd-btn primary" title="Download ZIP"><i class='bx bxs-download'></i> <span>ZIP</span></button>
-        </div>
-      </div>
-
-      <!-- Tree Container -->
-      <div class="tree-workspace">
-        <div class="tree" id="tree"></div>
-      </div>
-
-      <!-- Footer / Status Bar -->
-      <footer class="app-status-bar">
-        <div class="status-left">
-          <span id="statState"><i class='bx bxs-circle' style="color: #10b981; font-size: 8px;"></i> Ready</span>
-          <span class="status-sep"></span>
-          <span id="statNodes">0 Nodes</span>
-        </div>
-        <div class="status-right">
-          <span id="status"></span>
-        </div>
-      </footer>
-    </main>
+<body>
+  <!-- ===== ADSENSE BÊN TRÁI ===== -->
+  <div class="ad-container side-ad">
+    <span class="ad-label">Quảng cáo</span>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3405863331117687"
+      crossorigin="anonymous"></script>
+    <!-- Quảng cáo dọc (skyscraper): 160x600 -->
+    <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+      data-ad-client="ca-pub-3405863331117687" data-ad-slot="YYYYYYYYYY"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 
-  <!-- Panels & Modals (Absolute positioned) -->
-  
-  <!-- Import Box -->
-  <div class="panel-overlay" id="importBox" style="display: none;">
-    <div class="panel-content">
-      <h3 id="importTitle"><i class='bx bx-import'></i> Import ASCII Tree</h3>
+  <div id="app" style="position:relative;">
+    <h1 id="titleText">Cấu trúc thư mục Clean Architecture</h1>
+    <button id="switchLangBtn"
+      style="position:absolute; right:0px; top:0px; padding:6px 12px; border-radius:8px; border:1px solid #d1d5db; background:#fff; cursor:pointer; font-size:12px;">🇺🇸
+      English</button>
+    <div class="hint" id="hintText">Kéo thả để di chuyển. Click chọn, Ctrl/Cmd+click chọn nhiều, chuột phải để mở menu.
+      Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản.</div>
+
+    <div class="search-bar">
+      <input id="searchInput" placeholder="Tìm file/folder theo tên..." />
+      <button id="searchClearBtn">Xóa tìm</button>
+    </div>
+
+    <div class="toolbar">
+      <button id="addRootFolder">+ Folder gốc</button>
+      <button id="addRootFile">+ File gốc</button>
+      <span class="toolbar-sep"></span>
+      <button id="cutBtn" title="Ctrl+X">✂️ Cắt</button>
+      <button id="copyBtn" title="Ctrl+C">📄 Copy</button>
+      <button id="pasteBtn" title="Ctrl+V">📋 Dán</button>
+      <button id="duplicateBtn" title="Ctrl+D">🧬 Nhân bản</button>
+      <button id="undoBtn" title="Ctrl+Z">↩️ Hoàn tác</button>
+      <button id="redoBtn" title="Ctrl+Y">↪️ Làm lại</button>
+      <span class="toolbar-sep"></span>
+      <button id="collapseAllBtn">Thu gọn tất cả</button>
+      <button id="expandAllBtn">Mở rộng tất cả</button>
+      <span class="toolbar-sep"></span>
+      <button class="btn btn-secondary" id="importToggleBtn" title="Import from Text">Import</button>
+      <button class="btn btn-secondary" id="aiToggleBtn" title="Generate with AI"
+        style="background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none;">✨ AI
+        Generate</button>
+      <button class="btn btn-danger" id="deleteSelectedBtn" title="Delete Selected">🗑️ Delete</button>
+      <button id="uploadZipBtn">Tải ZIP lên</button>
+      <input type="file" id="zipFileInput" accept=".zip" style="display:none" />
+      <button id="exportBtn">Xuất text</button>
+      <button id="zipBtn" class="primary">Tải ZIP</button>
+    </div>
+
+
+
+    <!-- Import Box -->
+    <div class="import-box" id="importBox" style="display: none;">
+      <h3 id="importTitle" style="margin-top:0;">Import ASCII Tree</h3>
       <textarea id="importInput" rows="10" placeholder="Paste text tree structure here..."></textarea>
-      <div class="panel-actions">
+      <div class="import-actions">
         <button class="btn btn-secondary" id="importCancelBtn">Cancel</button>
         <button class="btn btn-primary" id="importApplyBtn">Apply</button>
       </div>
     </div>
-  </div>
 
-  <!-- AI Box -->
-  <div class="panel-overlay" id="aiBox" style="display: none;">
-    <div class="panel-content ai-panel">
-      <div class="panel-header">
-        <h3 id="aiBoxTitle"><i class='bx bx-bot'></i> Generate with AI</h3>
-        <button id="aiToggleKeyBtn" class="icon-btn"><i class='bx bx-cog'></i></button>
+    <!-- AI Box -->
+    <div class="import-box" id="aiBox" style="display: none; border-left: 4px solid #a855f7;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <button id="aiToggleKeyBtn" class="btn"
+          style="background: none; border: none; color: #64748b; font-size: 12px; cursor: pointer; text-decoration: underline;">⚙️
+          API Key Settings</button>
       </div>
-      
-      <div id="aiKeySection" class="settings-section" style="display: none;">
-        <label for="aiProvider">AI Provider:</label>
-        <select id="aiProvider" class="form-select">
+
+      <div id="aiKeySection"
+        style="display: none; margin-bottom: 15px; padding: 10px; background: #f8fafc; border-radius: 4px; border: 1px solid #e2e8f0;">
+        <label for="aiProvider" style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 12px;">AI
+          Provider:</label>
+        <select id="aiProvider"
+          style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #cbd5e1; box-sizing: border-box;">
           <option value="gemini">Google Gemini</option>
           <option value="openai">OpenAI (ChatGPT)</option>
           <option value="openrouter">OpenRouter</option>
           <option value="ollama">Ollama (Local)</option>
         </select>
-        
-        <label id="aiLabelKey" for="aiApiKey">API Key:</label>
-        <input type="password" id="aiApiKey" class="form-input" placeholder="..." />
-        <p id="aiKeyHint" class="hint-text">Key is stored safely in your browser.</p>
+
+        <label id="aiLabelKey" for="aiApiKey"
+          style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 12px;">Gemini API Key:</label>
+        <input type="password" id="aiApiKey" placeholder="AIzaSy..."
+          style="width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #cbd5e1; box-sizing: border-box;" />
+        <p id="aiKeyHint" style="margin: 5px 0 0; font-size: 11px; color: #64748b;">Key is stored safely in your
+          browser.</p>
       </div>
-      
-      <textarea id="aiPrompt" rows="4" class="form-input" placeholder="Describe your project (e.g. A Node.js API with src, routes, controllers...)"></textarea>
-      
-      <div class="panel-actions">
+
+      <textarea id="aiPrompt" rows="3"
+        placeholder="Describe your project (e.g. A Node.js API with src, routes, controllers...)"
+        style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: inherit; resize: vertical; box-sizing: border-box;"></textarea>
+
+      <div class="import-actions" style="display: flex; justify-content: flex-end; gap: 8px;">
         <button class="btn btn-secondary" id="aiCancelBtn">Cancel</button>
-        <button class="btn btn-primary gradient-bg" id="aiGenerateBtn"><i class='bx bx-magic-wand'></i> Generate Tree</button>
+        <button class="btn btn-primary" id="aiGenerateBtn"
+          style="background: linear-gradient(135deg, #6366f1, #a855f7); border: none; color: white;">Generate
+          Tree</button>
       </div>
     </div>
-  </div>
 
-  <!-- Templates Box -->
-  <div class="panel-overlay" id="templatesBox" style="display: none;">
-    <div class="panel-content templates-panel">
-      <div class="panel-header">
-        <h3><i class='bx bx-layout'></i> Project Templates</h3>
-        <button id="templatesCloseBtn" class="icon-btn"><i class='bx bx-x'></i></button>
+    <div class="room-bar">
+      <span id="roomStatus">Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.</span>
+      <input id="roomInput" placeholder="Dán mã phòng để tham gia..." />
+      <button id="joinRoomBtn">Tham gia</button>
+      <button id="createRoomBtn">Tạo phòng mới</button>
+      <button id="shareLinkBtn" style="display:none;">🔗 Chia sẻ liên kết</button>
+    </div>
+
+    <div class="tree" id="tree"></div>
+
+    <!-- Status Bar (Right under tree) -->
+    <div class="status-bar" id="statusBar">
+      <div class="status-left">
+        <span id="statState">🟢 Ready</span>
+        <span id="statMode">Local</span>
+        <span id="statNodes">0 Nodes</span>
       </div>
-      <div id="templatesList" style="display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); margin-bottom: 16px;">
-        <!-- JS will populate -->
+      <div class="status-right">
+        <span id="statSaved">Unsaved</span>
       </div>
     </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="export-box" id="exportBox" style="display:none;">
+      <textarea id="exportOutput" readonly></textarea>
+    </div>
+    <!-- ===== GOOGLE ADSENSE BẮT ĐẦU ===== -->
+    <div class="ad-container">
+      <span class="ad-label">Quảng cáo</span>
+      <!-- THAY MÃ QUẢNG CÁO CỦA BẠN VÀO BÊN DƯỚI -->
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3405863331117687"
+        crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3405863331117687" data-ad-slot="YYYYYYYYYY"
+        data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+    <!-- ===== GOOGLE ADSENSE KẾT THÚC ===== -->
+
+    <!-- Proper Footer -->
+    <footer class="site-footer">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h3>Product</h3>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether#readme" target="_blank">Documentation</a>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether/issues" target="_blank">Roadmap</a>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether/releases" target="_blank">Release Notes</a>
+        </div>
+        <div class="footer-col">
+          <h3>Community</h3>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether" target="_blank">GitHub</a>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether/issues" target="_blank">Report Bug</a>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether/discussions" target="_blank">Suggest Feature</a>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="https://github.com/TinhSsc/BuildFolderTogether/blob/main/LICENSE" target="_blank">MIT License</a>
+        </div>
+      </div>
+
+      <div class="seo-about" id="footerAbout">
+        <strong>BuildFolderTogether</strong> is a collaborative online folder structure builder for developers. Design
+        project architectures, share them instantly, and export to ZIP or ASCII trees.
+      </div>
+
+      <div class="copyright">
+        © 2026 BuildFolderTogether
+      </div>
+    </footer>
   </div>
 
-  <div class="export-box" id="exportBox" style="display:none;">
-    <textarea id="exportOutput" readonly></textarea>
+  <!-- ===== ADSENSE BÊN PHẢI ===== -->
+  <div class="ad-container side-ad">
+    <span class="ad-label">Quảng cáo</span>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3405863331117687"
+      crossorigin="anonymous"></script>
+    <!-- Quảng cáo dọc (skyscraper): 160x600 -->
+    <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
+      data-ad-client="ca-pub-3405863331117687" data-ad-slot="YYYYYYYYYY"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 
-  <!-- Adsense Section -->
-  <div class="ad-container bottom-ad" style="display:none;">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3405863331117687" crossorigin="anonymous"></script>
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3405863331117687" data-ad-slot="YYYYYYYYYY" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-
-  <!-- Scripts -->
   <script src="libs/jszip.min.js"></script>
+
   <script src="js/config.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/lang/vi.js"></script>
@@ -262,7 +281,7 @@
   <script src="js/room.js"></script>
   <script src="js/ai.js"></script>
   <script src="js/zip.js"></script>
-  <script src="js/templates.js"></script>
   <script src="js/app.js"></script>
 </body>
+
 </html>

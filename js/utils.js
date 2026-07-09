@@ -74,15 +74,17 @@ window.TreeApp.utils = {
     el('statNodes').textContent = `${total} Nodes`;
     
     const mode = state.roomId ? `P2P Room` : 'Local';
-    el('statMode').textContent = mode;
+    if(el('statMode')) el('statMode').textContent = mode;
     
-    if (state.lastSaved) {
-      const d = state.lastSaved;
-      const hh = String(d.getHours()).padStart(2, '0');
-      const mm = String(d.getMinutes()).padStart(2, '0');
-      el('statSaved').textContent = `Saved ${hh}:${mm}`;
-    } else {
-      el('statSaved').textContent = `Unsaved`;
+    if(el('statSaved')) {
+      if (state.lastSaved) {
+        const d = state.lastSaved;
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        el('statSaved').textContent = `Saved ${hh}:${mm}`;
+      } else {
+        el('statSaved').textContent = `Unsaved`;
+      }
     }
   },
 
