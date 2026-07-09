@@ -9,7 +9,7 @@ body {
   gap: 20px;
 }
 
-#app { font-family: -apple-system, Segoe UI, sans-serif; color: #1e2430; font-size: 14px; width: 100%; max-width: 720px; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+#app { font-family: -apple-system, Segoe UI, sans-serif; color: #1e2430; font-size: 14px; width: 100%; max-width: 1024px; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
 #app h1 { font-size: 19px; margin: 0 0 4px; font-weight: 600; }
 #app .hint { color: #6b7280; font-size: 13px; margin-bottom: 14px; }
 #app .status { font-size: 11px; color: #9ca3af; margin-top: 6px; height: 14px; }

@@ -94,20 +94,23 @@
         <h1 id="titleText" style="margin-top: 0; margin-bottom: 5px;">Cấu trúc thư mục Clean Architecture</h1>
         <div class="hint" id="hintText" style="margin-bottom: 0;">Kéo thả để di chuyển. Click chọn, Ctrl/Cmd+click chọn
           nhiều, chuột phải để mở menu. Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản.</div>
+
       </div>
-      <div class="app-header-right" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
+
+      <div class="app-header-right" style="display: flex; flex-direction: row; align-items: center; gap: 8px;">
+
+        <div class="room-bar" style="margin-bottom: 0;">
+          <span id="roomStatus">Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.</span>
+          <input id="roomInput" placeholder="Dán mã phòng để tham gia..." />
+          <button id="joinRoomBtn">Tham gia</button>
+          <button id="createRoomBtn">Tạo phòng mới</button>
+          <button id="shareLinkBtn" style="display:none;">🔗 Chia sẻ liên kết</button>
+        </div>
         <button id="switchLangBtn"
           style="padding:6px 12px; border-radius:8px; border:1px solid #d1d5db; background:#fff; cursor:pointer; font-size:12px;">🇺🇸
           English</button>
+      </div>
 
-      </div>
-      <div class="room-bar" style="margin-bottom: 0;">
-        <span id="roomStatus">Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.</span>
-        <input id="roomInput" placeholder="Dán mã phòng để tham gia..." />
-        <button id="joinRoomBtn">Tham gia</button>
-        <button id="createRoomBtn">Tạo phòng mới</button>
-        <button id="shareLinkBtn" style="display:none;">🔗 Chia sẻ liên kết</button>
-      </div>
     </div>
 
     <div class="search-bar">
