@@ -53,6 +53,7 @@
 
 /* Quảng cáo 2 bên (Skyscraper) */
 .side-ad {
+  display: block;
   width: 160px;
   height: 600px;
   flex-shrink: 0;
