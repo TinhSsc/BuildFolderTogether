@@ -296,12 +296,18 @@
   <script>
     // Chỉ kích hoạt Google AdSense khi quảng cáo thực sự được hiển thị (tránh lỗi 0-width)
     window.addEventListener('load', function() {
-      var insElements = document.querySelectorAll('ins.adsbygoogle');
-      insElements.forEach(function(ins) {
-        if (ins.parentElement && ins.parentElement.offsetWidth > 0) {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        }
-      });
+      setTimeout(function() {
+        var insElements = document.querySelectorAll('ins.adsbygoogle');
+        insElements.forEach(function(ins) {
+          if (ins.offsetWidth > 0 && window.getComputedStyle(ins).display !== 'none') {
+            try {
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+              console.warn("AdSense push error:", e);
+            }
+          }
+        });
+      }, 100);
     });
   </script>
 </body>
