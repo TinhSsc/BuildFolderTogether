@@ -82,11 +82,7 @@
     <!-- Quảng cáo dọc (skyscraper): 160x600 -->
     <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
       data-ad-client="ca-pub-3405863331117687" data-ad-slot="YYYYYYYYYY"></ins>
-    <script>
-      if (window.innerWidth > 1100) {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    </script>
+
   </div>
 
   <div id="app" style="position:relative;">
@@ -275,11 +271,7 @@
     <!-- Quảng cáo dọc (skyscraper): 160x600 -->
     <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px"
       data-ad-client="ca-pub-3405863331117687" data-ad-slot="YYYYYYYYYY"></ins>
-    <script>
-      if (window.innerWidth > 1100) {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    </script>
+
   </div>
 
   <script src="libs/jszip.min.js"></script>
@@ -300,6 +292,18 @@
   <script src="js/share.js"></script>
   <script src="js/zip.js"></script>
   <script src="js/app.js"></script>
+  
+  <script>
+    // Chỉ kích hoạt Google AdSense khi quảng cáo thực sự được hiển thị (tránh lỗi 0-width)
+    window.addEventListener('load', function() {
+      var insElements = document.querySelectorAll('ins.adsbygoogle');
+      insElements.forEach(function(ins) {
+        if (ins.parentElement && ins.parentElement.offsetWidth > 0) {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>
