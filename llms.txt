@@ -1,0 +1,25 @@
+# BuildFolderTogether
+
+> A free, real-time collaborative folder structure generator and visual file tree creator for developers.
+
+URL: https://build-folder-together.vercel.app/
+GitHub: https://github.com/TinhSsc/BuildFolderTogether
+
+## Overview
+BuildFolderTogether is an online Developer Tool (SaaS) that allows software engineers, architects, and teams to visually design directory structures, mock file systems, and generate folder layouts instantly.
+
+## Key Features
+- Real-time P2P Collaboration: Multiple users can edit the same folder structure simultaneously using WebRTC.
+- Drag & Drop: Intuitive interface for moving files and folders.
+- Import/Export ASCII: Paste an ASCII file tree to generate visual folders, or export visual folders to an ASCII tree text.
+- ZIP Download: Convert the visual folder structure into a real downloadable `.zip` file.
+- Auto .gitkeep: Automatically injects `.gitkeep` files into empty directories to preserve them in Git.
+
+## Use Cases
+- Designing Clean Architecture or MVC folder structures before coding.
+- Sharing project blueprints with teammates.
+- Writing documentation (exporting ASCII trees for README files).
+- Bootstrapping new projects quickly via ZIP download.
+
+## Target Audience
+Software Developers, Frontend Engineers, Backend Engineers, DevOps, Tech Leads, and Coding Bootcamps.
