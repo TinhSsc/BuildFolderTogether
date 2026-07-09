@@ -1,0 +1,96 @@
+// lang/en.js - English language file
+window.TreeApp = window.TreeApp || {};
+window.TreeApp.lang = window.TreeApp.lang || {};
+
+window.TreeApp.lang.en = {
+  app_title: "BuildFolderTogether - File Tree Generator",
+  app_hint: "Drag and drop to move. Click to select, Ctrl/Cmd+click for multi-select, right click for menu. Ctrl+Z/Y undo/redo, Ctrl+X/C/V cut/copy/paste, Ctrl+D duplicate.",
+  search_placeholder: "Search file/folder by name...",
+  search_clear: "Clear search",
+  btn_add_root_folder: "+ Root Folder",
+  btn_add_root_file: "+ Root File",
+  btn_cut: "✂️ Cut",
+  btn_copy: "📄 Copy",
+  btn_paste: "📋 Paste",
+  btn_duplicate: "🧬 Duplicate",
+  btn_undo: "↩️ Undo",
+  btn_redo: "↪️ Redo",
+  btn_collapse_all: "Collapse All",
+  btn_expand_all: "Expand All",
+  btn_import_toggle: "Import from text",
+  btn_upload_zip: "Upload ZIP",
+  btn_export: "Export text",
+  btn_zip: "Download ZIP",
+  import_placeholder: "Paste text tree structure here...",
+  btn_import_apply: "Apply",
+  btn_import_cancel: "Cancel",
+  room_status_offline: "Not in a room — data is saved locally.",
+  room_input_placeholder: "Paste room code to join...",
+  btn_join_room: "Join",
+  btn_create_room: "Create Room",
+  btn_share_link: "🔗 Share Link",
+
+  err_duplicate_name: "Duplicate name, renamed to ",
+  empty_tree: "Nothing here yet. Click '+ Root Folder' or '+ Root File' to start.",
+  title_add_folder: "Add child folder",
+  title_add_file: "Add child file",
+  title_add_gitkeep: "Add .gitkeep",
+  title_note_gitkeep: "Note in .gitkeep",
+  title_delete: "Delete",
+  placeholder_note: "Write a note inside .gitkeep (e.g., purpose of this folder)...",
+  
+  ctx_rename: "Rename",
+  ctx_delete: "Delete",
+  ctx_copy: "Copy",
+  ctx_cut: "Cut",
+  ctx_duplicate: "Duplicate",
+  ctx_paste: "Paste here",
+  ctx_new_folder: "New Folder",
+  ctx_new_file: "New File",
+  
+  undo_empty: "Nothing to undo",
+  undo_done: "Undone",
+  redo_empty: "Nothing to redo",
+  redo_done: "Redone",
+  
+  sel_empty: "No item selected",
+  cut_done: "Cut",
+  clipboard_empty: "Clipboard is empty",
+  paste_done: "Pasted",
+  delete_done: "Deleted",
+  copy_done: "Copied",
+  duplicate_done: "Duplicated",
+  
+  search_not_found: "Not found",
+  
+  save_done: "Saved",
+  save_err: "Save error",
+  
+  room_peer_connected: "A peer has connected",
+  room_host_status: "Room (host):",
+  room_host_lost: "Lost connection to host.",
+  room_host_lost_confirm: "The host has disconnected.\\n\\nWould you like to become the new host for this room?\\n(Your current tree will become the source of truth. Others need to 'Join' again with the same code.)",
+  room_host_new_waiting: "Room (new host): {roomId} — waiting for peers...",
+  room_host_waiting: "Room (host): {roomId} — waiting for peers...",
+  room_left: "Left room '{roomId}'. You can click 'Join' to reconnect.",
+  room_connected_to: "Connected to room:",
+  room_conn_failed: "P2P connection failed, try another network",
+  room_connecting: "Connecting to room {roomId}...",
+  room_need_id: "Enter room code first",
+  
+  zip_no_lib: "Could not load ZIP library",
+  zip_empty: "(empty)",
+  zip_replace_confirm: "This action will replace the entire tree. Continue?",
+  zip_reading: "Reading ZIP file...",
+  zip_imported: "Imported structure from ZIP",
+  zip_err: "Error reading ZIP file",
+  
+  import_empty: "No content pasted",
+  
+  link_copied: "Copied room link",
+  link_copy_failed: "Auto-copy failed, populated the input field",
+  
+  switch_lang: "🇻🇳 Tiếng Việt",
+
+  footer_about: "<strong>BuildFolderTogether</strong> is a collaborative online folder structure builder for developers. Design project architectures, share them instantly, and export to ZIP or ASCII trees."
+};

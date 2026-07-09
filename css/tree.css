@@ -1,0 +1,21 @@
+/* tree.css - Styles for the tree, nodes, and drag/drop */
+#app .tree { border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 10px; background: #fff; min-height: 100px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+#app .node-row { display: flex; align-items: center; gap: 6px; padding: 5px 6px; border-radius: 6px; cursor: grab; }
+#app .node-row:hover { background: #f3f4f6; }
+#app .node-row.drag-over { background: #e0e7ff; outline: 2px dashed #6366f1; }
+#app .node-row.selected { background: #dbeafe; outline: 1px solid #93c5fd; }
+#app .node-row.match { background: #fef08a; }
+#app .node-row .caret { width: 14px; text-align: center; cursor: pointer; color: #9ca3af; font-size: 10px; flex-shrink: 0; }
+#app .node-row .caret.spacer { cursor: default; }
+#app .node-row .icon { width: 18px; text-align: center; }
+#app .node-row .name-input { border: none; background: transparent; font-size: 14px; outline: none; flex: 1; min-width: 40px; font-family: inherit; }
+#app .node-row .name-input:focus { background: #fff; box-shadow: 0 0 0 1px #93c5fd; border-radius: 4px; }
+#app .node-row .actions { display: none; gap: 2px; }
+#app .node-row:hover .actions { display: flex; }
+#app .node-row .actions button { border: none; background: none; cursor: pointer; color: #9ca3af; font-size: 12px; padding: 3px 5px; border-radius: 4px; }
+#app .node-row .actions button:hover { color: #374151; background: #e5e7eb; }
+#app .children { margin-left: 22px; border-left: 1px dashed #d1d5db; padding-left: 10px; }
+#app .empty { color: #9ca3af; font-size: 13px; padding: 10px; text-align: center; }
+
+#app .note-toggle { margin-left: 24px; margin-top: 2px; margin-bottom: 4px; }
+#app .note-toggle textarea { width: 100%; max-width: 400px; height: 60px; font-size: 12px; padding: 6px 8px; border: 1px solid #fde68a; background: #fffbeb; border-radius: 6px; box-sizing: border-box; font-family: inherit; }

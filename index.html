@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuildFolderTogether - Collaborative File Tree Generator</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="BuildFolderTogether is a real-time collaborative file tree generator and editor. Create, share, export and import folder structures easily.">
+  <meta name="keywords" content="folder structure, file tree, directory generator, real-time collaboration, webrtc, folder tree creator, developer tools, clean architecture">
+  <meta name="author" content="BuildFolderTogether">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://buildfoldertogether.com/">
+  <meta property="og:title" content="BuildFolderTogether - Collaborative File Tree Generator">
+  <meta property="og:description" content="Design and share your project's folder structure in real-time with peer-to-peer collaboration.">
+  <meta property="og:image" content="https://buildfoldertogether.com/assets/images/og-image.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://buildfoldertogether.com/">
+  <meta property="twitter:title" content="BuildFolderTogether - Collaborative File Tree Generator">
+  <meta property="twitter:description" content="Design and share your project's folder structure in real-time with peer-to-peer collaboration.">
+  <meta property="twitter:image" content="https://buildfoldertogether.com/assets/images/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+
+  <!-- Schema Markup (JSON-LD) for Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BuildFolderTogether",
+    "url": "https://buildfoldertogether.com/",
+    "description": "A real-time collaborative file tree generator and editor. Create, share, export and import folder structures easily.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/tree.css">
+  <link rel="stylesheet" href="css/context-menu.css">
+</head>
+
+<body>
+  <!-- ===== ADSENSE BÊN TRÁI ===== -->
+  <div class="ad-container side-ad">
+    <span class="ad-label">Quảng cáo</span>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <!-- Quảng cáo dọc (skyscraper): 160x600 -->
+    <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXX" data-ad-slot="YYYYYYYYYY"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <div id="app" style="position:relative;">
+    <h1 id="titleText">Cấu trúc thư mục Clean Architecture</h1>
+    <button id="switchLangBtn"
+      style="position:absolute; right:0px; top:0px; padding:6px 12px; border-radius:8px; border:1px solid #d1d5db; background:#fff; cursor:pointer; font-size:12px;">🇺🇸
+      English</button>
+    <div class="hint" id="hintText">Kéo thả để di chuyển. Click chọn, Ctrl/Cmd+click chọn nhiều, chuột phải để mở menu.
+      Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản.</div>
+
+    <div class="search-bar">
+      <input id="searchInput" placeholder="Tìm file/folder theo tên..." />
+      <button id="searchClearBtn">Xóa tìm</button>
+    </div>
+
+    <div class="toolbar">
+      <button id="addRootFolder">+ Folder gốc</button>
+      <button id="addRootFile">+ File gốc</button>
+      <span class="toolbar-sep"></span>
+      <button id="cutBtn" title="Ctrl+X">✂️ Cắt</button>
+      <button id="copyBtn" title="Ctrl+C">📄 Copy</button>
+      <button id="pasteBtn" title="Ctrl+V">📋 Dán</button>
+      <button id="duplicateBtn" title="Ctrl+D">🧬 Nhân bản</button>
+      <button id="undoBtn" title="Ctrl+Z">↩️ Hoàn tác</button>
+      <button id="redoBtn" title="Ctrl+Y">↪️ Làm lại</button>
+      <span class="toolbar-sep"></span>
+      <button id="collapseAllBtn">Thu gọn tất cả</button>
+      <button id="expandAllBtn">Mở rộng tất cả</button>
+      <span class="toolbar-sep"></span>
+      <button id="importToggleBtn">Nhập từ text</button>
+      <button id="uploadZipBtn">Tải ZIP lên</button>
+      <input type="file" id="zipFileInput" accept=".zip" style="display:none" />
+      <button id="exportBtn">Xuất text</button>
+      <button id="zipBtn" class="primary">Tải ZIP</button>
+    </div>
+
+
+
+    <div class="import-box" id="importBox" style="display:none;">
+      <textarea id="importInput" placeholder="Dán cây thư mục dạng text vào đây..."></textarea>
+      <div class="row">
+        <button id="importApplyBtn" class="primary">Áp dụng (thay thế cây hiện tại)</button>
+        <button id="importCancelBtn">Hủy</button>
+      </div>
+    </div>
+
+    <div class="room-bar">
+      <span id="roomStatus">Chưa vào phòng — dữ liệu chỉ lưu cho riêng bạn.</span>
+      <input id="roomInput" placeholder="Dán mã phòng để tham gia..." />
+      <button id="joinRoomBtn">Tham gia</button>
+      <button id="createRoomBtn">Tạo phòng mới</button>
+      <button id="shareLinkBtn" style="display:none;">🔗 Chia sẻ liên kết</button>
+    </div>
+
+    <div class="tree" id="tree"></div>
+    
+    <!-- Status Bar (Right under tree) -->
+    <div class="status-bar" id="statusBar">
+      <div class="status-left">
+        <span id="statState">🟢 Ready</span>
+        <span id="statMode">Local</span>
+        <span id="statNodes">0 Nodes</span>
+      </div>
+      <div class="status-right">
+        <span id="statSaved">Unsaved</span>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="export-box" id="exportBox" style="display:none;">
+      <textarea id="exportOutput" readonly></textarea>
+    </div>
+    <!-- ===== GOOGLE ADSENSE BẮT ĐẦU ===== -->
+    <div class="ad-container">
+      <span class="ad-label">Quảng cáo</span>
+      <!-- THAY MÃ QUẢNG CÁO CỦA BẠN VÀO BÊN DƯỚI -->
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXX"
+        crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXX" data-ad-slot="YYYYYYYYYY"
+        data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+    <!-- ===== GOOGLE ADSENSE KẾT THÚC ===== -->
+
+    <!-- Proper Footer -->
+    <footer class="site-footer">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h3>Product</h3>
+          <a href="#">Documentation</a>
+          <a href="#">Roadmap</a>
+          <a href="#">Release Notes</a>
+        </div>
+        <div class="footer-col">
+          <h3>Community</h3>
+          <a href="#">GitHub</a>
+          <a href="#">Issues</a>
+          <a href="#">Discord</a>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">MIT License</a>
+        </div>
+      </div>
+      
+      <div class="seo-about" id="footerAbout">
+        <strong>BuildFolderTogether</strong> is a collaborative online folder structure builder for developers. Design project architectures, share them instantly, and export to ZIP or ASCII trees.
+      </div>
+
+      <div class="copyright">
+        © 2026 BuildFolderTogether
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===== ADSENSE BÊN PHẢI ===== -->
+  <div class="ad-container side-ad">
+    <span class="ad-label">Quảng cáo</span>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    <!-- Quảng cáo dọc (skyscraper): 160x600 -->
+    <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXX" data-ad-slot="YYYYYYYYYY"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <script src="libs/jszip.min.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/lang/vi.js"></script>
+  <script src="js/lang/en.js"></script>
+  <script src="js/lang/i18n.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/tree.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/contextMenu.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/room.js"></script>
+  <script src="js/zip.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
