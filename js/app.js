@@ -117,21 +117,41 @@ window.TreeApp = window.TreeApp || {};
   const aiLabelKey = document.getElementById('aiLabelKey');
   const aiKeyHint = document.getElementById('aiKeyHint');
   
+  const aiGoqKeys = document.getElementById('aiGoqKeys');
+
   if (aiProvider) {
     aiProvider.value = window.TreeApp.ai.getProvider();
     aiApiKey.value = window.TreeApp.ai.getApiKey(aiProvider.value);
+    aiGoqKeys.value = window.TreeApp.ai.getApiKey('goq');
     
-    aiProvider.onchange = () => {
-      const p = aiProvider.value;
-      window.TreeApp.ai.setProvider(p);
-      aiApiKey.value = window.TreeApp.ai.getApiKey(p);
+    const updateProviderUI = (p) => {
+      // Toggle single-key vs multi-key input
+      const isGoq = p === 'goq';
+      aiApiKey.style.display = isGoq ? 'none' : 'block';
+      aiGoqKeys.style.display = isGoq ? 'block' : 'none';
       
-      if (p === 'gemini') { aiLabelKey.textContent = 'Gemini API Key:'; aiApiKey.placeholder = 'AIzaSy...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
+      if (isGoq) { 
+        aiLabelKey.textContent = 'Gemini API Keys (one per line):';
+        aiKeyHint.innerHTML = '⚡ GOQ auto-cycles keys when one hits quota. <a href="https://aistudio.google.com/apikey" target="_blank">Get free keys ↗</a>';
+      }
+      else if (p === 'gemini') { aiLabelKey.textContent = 'Gemini API Key:'; aiApiKey.placeholder = 'AIzaSy...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
       else if (p === 'openai') { aiLabelKey.textContent = 'OpenAI API Key:'; aiApiKey.placeholder = 'sk-...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
       else if (p === 'openrouter') { aiLabelKey.textContent = 'OpenRouter API Key:'; aiApiKey.placeholder = 'sk-or-v1-...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
       else if (p === 'ollama') { aiLabelKey.textContent = 'Ollama Model Name (e.g. llama3):'; aiApiKey.placeholder = 'llama3'; aiApiKey.type = 'text'; aiKeyHint.textContent = 'Ensure Ollama is running on localhost:11434 with OLLAMA_ORIGINS="*".'; }
     };
-    aiProvider.dispatchEvent(new Event('change'));
+
+    aiProvider.onchange = () => {
+      const p = aiProvider.value;
+      window.TreeApp.ai.setProvider(p);
+      // Load the stored value for this provider
+      if (p === 'goq') {
+        aiGoqKeys.value = window.TreeApp.ai.getApiKey('goq');
+      } else {
+        aiApiKey.value = window.TreeApp.ai.getApiKey(p);
+      }
+      updateProviderUI(p);
+    };
+    updateProviderUI(aiProvider.value);
   }
   
   document.getElementById('aiToggleBtn').onclick = () => { aiBox.style.display = aiBox.style.display === 'none' ? 'block' : 'none'; };
@@ -151,23 +171,29 @@ window.TreeApp = window.TreeApp || {};
   
   document.getElementById('aiGenerateBtn').onclick = async () => {
     const provider = aiProvider.value;
-    const key = aiApiKey.value.trim();
+    const key = provider === 'goq' ? aiGoqKeys.value.trim() : aiApiKey.value.trim();
     const prompt = aiPrompt.value.trim();
     
     if (!key && provider !== 'ollama') { 
-      utils.showStatus('API Key required'); 
+      utils.showStatus(provider === 'goq' ? 'GOQ: Please add at least one API key' : 'API Key required'); 
       aiKeySection.style.display = 'block';
-      aiApiKey.focus();
+      if (provider === 'goq') aiGoqKeys.focus(); else aiApiKey.focus();
       return; 
     }
     if (!prompt) { utils.showStatus('Prompt required'); return; }
     
-    window.TreeApp.ai.setApiKey(provider, key);
+    // Save keys
+    if (provider === 'goq') {
+      window.TreeApp.ai.setApiKey('goq', key);
+    } else {
+      window.TreeApp.ai.setApiKey(provider, key);
+    }
+    
     utils.showStatus('Generating with AI...');
     document.getElementById('aiGenerateBtn').disabled = true;
     
     try {
-      const asciiTree = await window.TreeApp.ai.generateTree(prompt, key, provider);
+      const asciiTree = await window.TreeApp.ai.generateTree(prompt, key, provider, (msg) => utils.showStatus(msg));
       const parsedTree = window.TreeApp.zipLogic.parseTextTree(asciiTree);
       if (parsedTree && parsedTree.length > 0) {
         state.tree = parsedTree;

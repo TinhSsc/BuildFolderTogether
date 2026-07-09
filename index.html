@@ -168,6 +168,7 @@
           Provider:</label>
         <select id="aiProvider"
           style="width: 100%; padding: 6px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #cbd5e1; box-sizing: border-box;">
+          <option value="goq">⚡ GOQ (Gemini Multi-Key Fallback)</option>
           <option value="gemini">Google Gemini</option>
           <option value="openai">OpenAI (ChatGPT)</option>
           <option value="openrouter">OpenRouter</option>
@@ -176,8 +177,15 @@
 
         <label id="aiLabelKey" for="aiApiKey"
           style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 12px;">Gemini API Key:</label>
+        <!-- Single key input -->
         <input type="password" id="aiApiKey" placeholder="AIzaSy..."
           style="width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #cbd5e1; box-sizing: border-box;" />
+        <!-- GOQ multi-key input (hidden by default) -->
+        <textarea id="aiGoqKeys" rows="4" placeholder="Paste one Gemini API key per line:
+AIzaSy...
+AIzaSy...
+AIzaSy..."
+          style="display:none; width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #cbd5e1; font-family: ui-monospace, monospace; font-size: 12px; box-sizing: border-box; resize: vertical;"></textarea>
         <p id="aiKeyHint" style="margin: 5px 0 0; font-size: 11px; color: #64748b;">Key is stored safely in your
           browser.</p>
       </div>
