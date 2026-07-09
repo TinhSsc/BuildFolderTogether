@@ -4,7 +4,7 @@ window.TreeApp.lang = window.TreeApp.lang || {};
 
 window.TreeApp.lang.en = {
   app_title: "BuildFolderTogether - File Tree Generator",
-  app_hint: "Drag and drop to move. Click to select, Ctrl/Cmd+click for multi-select, right click for menu. Ctrl+Z/Y undo/redo, Ctrl+X/C/V cut/copy/paste, Ctrl+D duplicate.",
+  app_hint: "Drag and drop to move. Click to select, Ctrl+click for multi-select, right click for menu. Shortcuts: Ctrl+A select all, Ctrl+F search, Ctrl+Z/Y undo/redo, Ctrl+X/C/V cut/copy/paste, Ctrl+D duplicate, Ctrl+E expand all, Ctrl+Shift+E collapse all, Esc deselect/close.",
   search_placeholder: "Search file/folder by name...",
   search_clear: "Clear search",
   btn_add_root_folder: "+ Root Folder",

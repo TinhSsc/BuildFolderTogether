@@ -4,7 +4,7 @@ window.TreeApp.lang = window.TreeApp.lang || {};
 
 window.TreeApp.lang.vi = {
   app_title: "BuildFolderTogether - Tạo cây thư mục",
-  app_hint: "Kéo thả để di chuyển. Click chọn, Ctrl/Cmd+click chọn nhiều, chuột phải để mở menu. Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản.",
+  app_hint: "Kéo thả để di chuyển. Click chọn, Ctrl+click chọn nhiều, chuột phải mở menu. Phím tắt: Ctrl+A chọn tất cả, Ctrl+F tìm kiếm, Ctrl+Z/Y hoàn tác/làm lại, Ctrl+X/C/V cắt/copy/dán, Ctrl+D nhân bản, Ctrl+E mở rộng, Ctrl+Shift+E thu gọn, Esc bỏ chọn/đóng.",
   search_placeholder: "Tìm file/folder theo tên...",
   search_clear: "Xóa tìm",
   btn_add_root_folder: "+ Folder gốc",

@@ -57,6 +57,20 @@ window.TreeApp = window.TreeApp || {};
     const tag = (e.target.tagName || '').toLowerCase();
     const isEditable = tag === 'input' || tag === 'textarea';
     
+    // Escape: close panels / deselect
+    if (e.key === 'Escape') {
+      if (document.getElementById('aiBox').style.display !== 'none') {
+        document.getElementById('aiBox').style.display = 'none'; return;
+      }
+      if (document.getElementById('importBox').style.display !== 'none') {
+        document.getElementById('importBox').style.display = 'none'; return;
+      }
+      if (state.selectedIds.size > 0) {
+        state.selectedIds.clear(); render.renderTree(); return;
+      }
+      return;
+    }
+
     // Delete selected items using Delete or Backspace key
     if ((e.key === 'Delete' || e.key === 'Backspace') && !isEditable && state.selectedIds.size > 0) {
       e.preventDefault();
@@ -67,12 +81,44 @@ window.TreeApp = window.TreeApp || {};
     const ctrl = e.ctrlKey || e.metaKey;
     if (!ctrl) return;
     const key = e.key.toLowerCase();
+
+    // Ctrl+A: Select all nodes
+    if (key === 'a' && !isEditable) {
+      e.preventDefault();
+      function collectAllIds(nodes, acc) {
+        nodes.forEach(n => { acc.add(n.id); if (n.children) collectAllIds(n.children, acc); });
+      }
+      collectAllIds(state.tree, state.selectedIds);
+      render.renderTree();
+      return;
+    }
+
+    // Ctrl+F: Focus search bar
+    if (key === 'f') {
+      e.preventDefault();
+      const si = document.getElementById('searchInput');
+      if (si) { si.focus(); si.select(); }
+      return;
+    }
+
     if (key === 'z' && !e.shiftKey) { if (!isEditable) { e.preventDefault(); history.undo(); } return; }
     if (key === 'y' || (key === 'z' && e.shiftKey)) { if (!isEditable) { e.preventDefault(); history.redo(); } return; }
     if (key === 'x') { if (!isEditable && state.selectedIds.size > 0) { e.preventDefault(); treeLogic.cutSelected(); } return; }
     if (key === 'c') { if (!isEditable && state.selectedIds.size > 0) { e.preventDefault(); treeLogic.copySelected(); } return; }
     if (key === 'v') { if (!isEditable && state.clipboard.nodes.length > 0) { e.preventDefault(); treeLogic.pasteClipboard(); } return; }
     if (key === 'd') { if (!isEditable && state.selectedIds.size > 0) { e.preventDefault(); treeLogic.duplicateSelected(); } return; }
+
+    // Ctrl+E: Expand all / Ctrl+Shift+E: Collapse all
+    if (key === 'e' && !isEditable) {
+      e.preventDefault();
+      if (e.shiftKey) {
+        state.collapsedIds = new Set(treeLogic.collectFolderIds(state.tree, []));
+      } else {
+        state.collapsedIds.clear();
+      }
+      render.renderTree();
+      return;
+    }
   });
 
   const importBox = document.getElementById('importBox');
