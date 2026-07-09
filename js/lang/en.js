@@ -17,7 +17,8 @@ window.TreeApp.lang.en = {
   btn_redo: "↪️ Redo",
   btn_collapse_all: "Collapse All",
   btn_expand_all: "Expand All",
-  btn_compact_gitkeep: "Hide gitkeep",
+  btn_compact_gitkeep_desktop: "Toggle .gitkeep",
+  btn_compact_gitkeep_mobile: "Hide gitkeep",
   btn_import_toggle: "Import from text",
   btn_upload_zip: "Upload ZIP",
   btn_export: "Export text",
@@ -109,5 +110,14 @@ window.TreeApp.lang.en = {
   toast_copy_link: "Template link copied to clipboard!",
   toast_template_loaded: "Template loaded successfully!",
   creating_link: "Creating short link...",
-  link_copied_short: "Copied short link!"
+  link_copied_short: "Copied short link!",
+  
+  popup_add_folder: "Add Folder",
+  popup_add_file: "Add File",
+  popup_add_gitkeep: "+.gitkeep",
+  popup_note: "Note",
+  popup_to_file: "To File",
+  popup_to_folder: "To Folder",
+  popup_delete: "Delete",
+  popup_purpose: "Purpose: "
 };

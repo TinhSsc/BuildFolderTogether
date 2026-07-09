@@ -63,6 +63,13 @@ window.TreeApp = window.TreeApp || {};
     };
   }
 
+  const closeMobileActionBtn = document.getElementById('closeMobileActionBtn');
+  if (closeMobileActionBtn) {
+    closeMobileActionBtn.onclick = () => {
+      document.getElementById('mobileActionPopup').style.display = 'none';
+    };
+  }
+
   const searchInput = document.getElementById('searchInput');
   searchInput.oninput = () => search.performSearch(searchInput.value);
   document.getElementById('searchClearBtn').onclick = () => { searchInput.value = ''; state.matchIds.clear(); render.renderTree(); };
@@ -284,18 +291,11 @@ window.TreeApp = window.TreeApp || {};
       const url = new URL(window.location.href);
       url.searchParams.set('t', encoded);
       
-      utils.showStatus(window.TreeApp.i18n.t('creating_link') || 'Đang tạo link rút gọn...');
-      const originalUrl = url.toString();
-      const finalUrl = await utils.shortenUrl(originalUrl);
-      
+      const finalUrl = url.toString();
       await navigator.clipboard.writeText(finalUrl);
-      if (finalUrl !== originalUrl) {
-        utils.showStatus(window.TreeApp.i18n.t('link_copied_short') || 'Đã chép link rút gọn!');
-      } else {
-        utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Đã chép link!');
-      }
-    } catch(e) {
-      utils.showStatus('Lỗi khi chép link');
+      utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Đã copy link chia sẻ vào bộ nhớ đệm!');
+    } catch (e) {
+      utils.showStatus('Failed to copy link: ' + e.message);
     }
   };
 
@@ -369,6 +369,9 @@ window.TreeApp = window.TreeApp || {};
       await storage.load();
       render.renderTree();
     }
+
+    // Init touch drag & drop for mobile
+    if (window.TreeApp.touchDnd) window.TreeApp.touchDnd.init();
   })();
 
 })();

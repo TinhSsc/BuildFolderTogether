@@ -129,7 +129,10 @@
       <span class="toolbar-sep"></span>
       <button id="collapseAllBtn">Thu gọn tất cả</button>
       <button id="expandAllBtn">Mở rộng tất cả</button>
-      <button id="compactGitkeepBtn" data-i18n="btn_compact_gitkeep">Ẩn gitkeep</button>
+        <button id="compactGitkeepBtn" class="primary-btn">
+          <span class="desktop-text" data-i18n="btn_compact_gitkeep_desktop">Ẩn/Hiện .gitkeep</span>
+          <span class="mobile-text" data-i18n="btn_compact_gitkeep_mobile">Ẩn gitkeep</span>
+        </button>
       <span class="toolbar-sep"></span>
       <button class="btn btn-secondary" id="importToggleBtn" title="Import from Text">Import</button>
       <button class="btn btn-secondary" id="shareTemplateBtn" title="Copy Template Link">🔗 Share</button>
@@ -221,10 +224,23 @@ AIzaSy..."
 
     <div class="status" id="status"></div>
 
+    <!-- Mobile Action Popup -->
+    <div id="mobileActionPopup" class="mobile-action-popup" style="display:none;">
+      <div class="map-header">
+        <span id="mapNodeName"></span>
+        <button id="closeMobileActionBtn">&times;</button>
+      </div>
+      <div id="mapPurpose" class="map-purpose" style="display:none;">
+        <strong data-i18n="popup_purpose">Mục đích: </strong>
+        <span id="mapPurposeText"></span>
+      </div>
+      <div id="mapButtons" class="map-buttons"></div>
+    </div>
+
     <!-- Purpose Popup -->
     <div id="purposePopup" class="purpose-popup" style="display:none;">
       <div class="purpose-header">
-        <strong>Mục đích: </strong><span id="purposeFolderName"></span>
+        <strong data-i18n="popup_purpose">Mục đích: </strong><span id="purposeFolderName"></span>
         <button id="closePurposeBtn">&times;</button>
       </div>
       <div class="purpose-content" id="purposeContent"></div>
@@ -309,6 +325,7 @@ AIzaSy..."
   <script src="js/ai.js"></script>
   <script src="js/share.js"></script>
   <script src="js/zip.js"></script>
+  <script src="js/touchDnd.js"></script>
   <script src="js/app.js"></script>
   
   <script>

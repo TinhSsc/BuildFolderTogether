@@ -17,7 +17,8 @@ window.TreeApp.lang.vi = {
   btn_redo: "↪️ Làm lại",
   btn_collapse_all: "Thu gọn tất cả",
   btn_expand_all: "Mở rộng tất cả",
-  btn_compact_gitkeep: "Ẩn gitkeep",
+  btn_compact_gitkeep_desktop: "Ẩn/Hiện .gitkeep",
+  btn_compact_gitkeep_mobile: "Ẩn gitkeep",
   btn_import_toggle: "Nhập từ text",
   btn_upload_zip: "Tải ZIP lên",
   btn_export: "Xuất text",
@@ -109,5 +110,14 @@ window.TreeApp.lang.vi = {
   toast_copy_link: "Đã copy link chia sẻ vào bộ nhớ đệm!",
   toast_template_loaded: "Đã tải cấu trúc mẫu thành công!",
   creating_link: "Đang tạo link rút gọn...",
-  link_copied_short: "Đã chép link rút gọn!"
+  link_copied_short: "Đã chép link rút gọn!",
+  
+  popup_add_folder: "Thêm Folder",
+  popup_add_file: "Thêm File",
+  popup_add_gitkeep: "+.gitkeep",
+  popup_note: "Ghi chú",
+  popup_to_file: "Thành File",
+  popup_to_folder: "Thành Folder",
+  popup_delete: "Xóa",
+  popup_purpose: "Mục đích: "
 };

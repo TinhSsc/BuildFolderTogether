@@ -29,20 +29,19 @@ window.TreeApp.render = {
       }
       this.renderTree();
       
+      const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      
+      // Old purposePopup is only for desktop now (if ever needed, though we show it inline)
+      // Actually, on desktop we show it inline. So we don't need purposePopup at all on desktop.
+      // But let's just make sure we close it.
       const purposePopup = document.getElementById('purposePopup');
       if (purposePopup) {
-        if (node.type === 'folder' && state.selectedIds.has(node.id)) {
-          const gitkeep = node.children ? node.children.find(c => c.type === 'gitkeep') : null;
-          if (gitkeep && gitkeep.note) {
-             document.getElementById('purposeFolderName').textContent = node.name;
-             document.getElementById('purposeContent').textContent = gitkeep.note;
-             purposePopup.style.display = 'block';
-          } else {
-             purposePopup.style.display = 'none';
-          }
-        } else if (!e.ctrlKey && !e.metaKey) {
-          purposePopup.style.display = 'none';
-        }
+        purposePopup.style.display = 'none';
+      }
+
+      // Show mobile action popup on touch devices
+      if (isMobile && state.selectedIds.has(node.id)) {
+        this.showMobileActionPopup(node);
       }
     });
 
@@ -66,6 +65,7 @@ window.TreeApp.render = {
     const dragHandle = document.createElement('span');
     dragHandle.className = 'drag-handle';
     dragHandle.innerHTML = '&#8942;&#8942;'; // double vertical ellipsis ⋮⋮
+    if (window.TreeApp.touchDnd) window.TreeApp.touchDnd.attachHandle(dragHandle, node.id);
     row.appendChild(dragHandle);
 
     const caret = document.createElement('span');
@@ -112,6 +112,22 @@ window.TreeApp.render = {
       window.TreeApp.room.broadcastTreeChange();
     };
     inputContainer.appendChild(input);
+
+    if (node.type === 'folder' && state.compactGitkeep && node.children) {
+      const gitkeepChild = node.children.find(c => c.type === 'gitkeep');
+      if (gitkeepChild && gitkeepChild.note) {
+        const noteSpan = document.createElement('span');
+        noteSpan.className = 'inline-note';
+        noteSpan.textContent = ' - ' + gitkeepChild.note;
+        noteSpan.style.color = '#9ca3af';
+        noteSpan.style.fontSize = '12px';
+        noteSpan.style.marginLeft = '6px';
+        noteSpan.style.whiteSpace = 'nowrap';
+        noteSpan.style.overflow = 'hidden';
+        noteSpan.style.textOverflow = 'ellipsis';
+        inputContainer.appendChild(noteSpan);
+      }
+    }
 
     row.appendChild(inputContainer);
 
@@ -204,6 +220,71 @@ window.TreeApp.render = {
     }
 
     return wrap;
+  },
+
+  showMobileActionPopup(node) {
+    const popup = document.getElementById('mobileActionPopup');
+    const nameEl = document.getElementById('mapNodeName');
+    const btnContainer = document.getElementById('mapButtons');
+    const purposeContainer = document.getElementById('mapPurpose');
+    const purposeTextEl = document.getElementById('mapPurposeText');
+    if (!popup || !btnContainer) return;
+
+    const treeLogic = window.TreeApp.treeLogic;
+    const history = window.TreeApp.history;
+    const icon = node.type === 'folder' ? '📁' : (node.type === 'gitkeep' ? '📌' : '📄');
+
+    nameEl.textContent = icon + ' ' + node.name;
+    btnContainer.innerHTML = '';
+    
+    if (purposeContainer) purposeContainer.style.display = 'none';
+
+    if (node.type === 'folder' && node.children) {
+      const gitkeep = node.children.find(c => c.type === 'gitkeep');
+      if (gitkeep && gitkeep.note && purposeContainer && purposeTextEl) {
+        purposeTextEl.textContent = gitkeep.note;
+        purposeContainer.style.display = 'block';
+      }
+    }
+
+    const makeBtn = (emoji, label, cls, onClick) => {
+      const b = document.createElement('button');
+      if (cls) b.className = cls;
+      b.innerHTML = `<span class="map-icon">${emoji}</span>${label}`;
+      b.addEventListener('click', (e) => { e.stopPropagation(); popup.style.display = 'none'; onClick(); });
+      btnContainer.appendChild(b);
+    };
+
+    if (node.type === 'folder') {
+      makeBtn('+📁', window.TreeApp.i18n.t('popup_add_folder') || 'Thêm Folder', '', () => history.mutate(() => treeLogic.addNode(node.children, 'folder')));
+      makeBtn('+📄', window.TreeApp.i18n.t('popup_add_file') || 'Thêm File', '', () => history.mutate(() => treeLogic.addNode(node.children, 'file')));
+      makeBtn('📌', window.TreeApp.i18n.t('popup_add_gitkeep') || '+.gitkeep', '', () => history.mutate(() => {
+        node.children.push({ id: window.TreeApp.utils.uid(), name: treeLogic.uniqueName(node.children, '.gitkeep'), type: 'gitkeep', note: '' });
+      }));
+    }
+
+    if (node.type === 'gitkeep') {
+      makeBtn('📝', window.TreeApp.i18n.t('popup_note') || 'Ghi chú', '', () => { node._noteOpen = !node._noteOpen; this.renderTree(); });
+    }
+
+    const canToggle = node.type === 'file' || (node.type === 'folder' && (!node.children || node.children.length === 0));
+    if (canToggle) {
+      makeBtn(node.type === 'folder' ? '📄' : '📁', node.type === 'folder' ? (window.TreeApp.i18n.t('popup_to_file') || 'Thành File') : (window.TreeApp.i18n.t('popup_to_folder') || 'Thành Folder'), '', () => {
+        history.mutate(() => {
+          if (node.type === 'file') { node.type = 'folder'; node.children = []; }
+          else { node.type = 'file'; delete node.children; }
+        });
+      });
+    }
+
+    makeBtn('✕', window.TreeApp.i18n.t('popup_delete') || 'Xóa', 'danger', () => history.mutate(() => treeLogic.deleteNode(node.id)));
+
+    popup.style.display = 'block';
+
+    // Re-trigger animation
+    popup.style.animation = 'none';
+    popup.offsetHeight; // reflow
+    popup.style.animation = '';
   },
 
   renderTree() {

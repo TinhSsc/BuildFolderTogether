@@ -2,10 +2,10 @@
 window.TreeApp = window.TreeApp || {};
 
 window.TreeApp.utils = {
-  uid() { 
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); 
+  uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   },
-  
+
   genRoomId() {
     const bytes = new Uint8Array(16);
     crypto.getRandomValues(bytes);
@@ -15,8 +15,8 @@ window.TreeApp.utils = {
   showStatus(msg) {
     const statusEl = window.TreeApp.elements.statusEl;
     statusEl.textContent = msg;
-    setTimeout(() => { 
-      if (statusEl.textContent === msg) statusEl.textContent = ''; 
+    setTimeout(() => {
+      if (statusEl.textContent === msg) statusEl.textContent = '';
     }, 1500);
   },
 
@@ -28,7 +28,7 @@ window.TreeApp.utils = {
     try {
       const url = new URL(window.location.href);
       if (window.TreeApp.state.roomId) {
-        url.searchParams.set('room', window.TreeApp.state.roomId); 
+        url.searchParams.set('room', window.TreeApp.state.roomId);
       } else {
         url.searchParams.delete('room');
       }
@@ -36,32 +36,6 @@ window.TreeApp.utils = {
     } catch (e) { /* ignore if not permitted in this environment */ }
   },
 
-  async shortenUrl(longUrl) {
-    if (longUrl.length < 200) return longUrl;
-    return new Promise((resolve) => {
-      const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-      window[callbackName] = function(data) {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        if (data && data.shorturl) {
-          resolve(data.shorturl);
-        } else {
-          console.warn('Failed to shorten URL, using long URL');
-          resolve(longUrl);
-        }
-      };
-
-      const script = document.createElement('script');
-      script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(longUrl)}&callback=${callbackName}`;
-      script.onerror = () => {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        console.warn('Failed to shorten URL due to network error');
-        resolve(longUrl);
-      };
-      document.body.appendChild(script);
-    });
-  },
 
   async copyShareLink() {
     if (!window.TreeApp.state.roomId) return;
@@ -99,17 +73,17 @@ window.TreeApp.utils = {
     const countNodes = (arr) => {
       arr.forEach(n => {
         total++;
-        if(n.children) countNodes(n.children);
+        if (n.children) countNodes(n.children);
       });
     };
     countNodes(state.tree);
 
     el('statNodes').textContent = `${total} Nodes`;
-    
+
     const mode = state.roomId ? `P2P Room` : 'Local';
-    if(el('statMode')) el('statMode').textContent = mode;
-    
-    if(el('statSaved')) {
+    if (el('statMode')) el('statMode').textContent = mode;
+
+    if (el('statSaved')) {
       if (state.lastSaved) {
         const d = state.lastSaved;
         const hh = String(d.getHours()).padStart(2, '0');
@@ -123,9 +97,9 @@ window.TreeApp.utils = {
 
   cloneWithNewIds(node) {
     const clone = JSON.parse(JSON.stringify(node));
-    (function assign(n) { 
-      n.id = window.TreeApp.utils.uid(); 
-      if (n.children) n.children.forEach(assign); 
+    (function assign(n) {
+      n.id = window.TreeApp.utils.uid();
+      if (n.children) n.children.forEach(assign);
     })(clone);
     return clone;
   }

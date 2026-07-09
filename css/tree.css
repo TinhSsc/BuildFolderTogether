@@ -1,7 +1,13 @@
 /* tree.css - Styles for the tree, nodes, and drag/drop */
 #app .tree { border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 10px; background: #fff; min-height: 100px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-#app .node-row { display: flex; align-items: center; gap: 6px; padding: 8px 6px; border-radius: 6px; cursor: grab; transition: background 0.2s ease, transform 0.2s ease; }
-#app .node-row:hover { background: #f3f4f6; transform: translateX(2px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+#app .node-row { display: flex; align-items: center; gap: 6px; padding: 8px 6px; border-radius: 6px; cursor: grab; transition: background 0.2s ease, transform 0.2s ease; flex-wrap: wrap; }
+@media (hover: hover) and (pointer: fine) {
+  #app .node-row:hover { background: #f3f4f6; transform: translateX(2px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  #app .node-row:hover .icon { transform: scale(1.1); }
+}
+@media (hover: none) and (pointer: coarse) {
+  #app .node-row:active { background: #f3f4f6; }
+}
 #app .node-row.drag-over { background: #e0e7ff; outline: 2px dashed #6366f1; }
 #app .node-row.selected { background: #dbeafe; outline: 1px solid #93c5fd; }
 #app .node-row.match { background: #fef08a; }
@@ -13,11 +19,10 @@
 #app .node-row .caret { width: 14px; text-align: center; cursor: pointer; color: #9ca3af; font-size: 10px; flex-shrink: 0; }
 #app .node-row .caret.spacer { cursor: default; }
 #app .node-row .icon { width: 18px; text-align: center; transition: transform 0.2s ease; }
-#app .node-row:hover .icon { transform: scale(1.1); }
 #app .node-row .name-input-container { display: flex; flex: 1; align-items: center; min-width: 0; }
 #app .node-row .name-input { border: none; background: transparent; font-size: 14px; outline: none; flex: 1; min-width: 40px; font-family: inherit; }
 #app .node-row .name-input:focus { background: #fff; box-shadow: 0 0 0 1px #93c5fd; border-radius: 4px; }
-#app .node-row .actions { display: none; gap: 4px; }
+#app .node-row .actions { display: none; gap: 4px; flex-wrap: wrap; }
 #app .node-row:hover .actions, #app .node-row.selected .actions { display: flex; }
 @media (hover: none) and (pointer: coarse) {
   #app .node-row .actions { display: flex; }
@@ -29,3 +34,72 @@
 
 #app .note-toggle { margin-left: 24px; margin-top: 2px; margin-bottom: 4px; }
 #app .note-toggle textarea { width: 100%; max-width: none; height: 100px; font-size: 14px; padding: 8px 10px; border: 1px solid #fde68a; background: #fffbeb; border-radius: 6px; box-sizing: border-box; font-family: inherit; resize: vertical; }
+
+/* On mobile: hide inline actions, use popup instead */
+.mobile-text { display: none; }
+@media (max-width: 768px) {
+  .desktop-text { display: none; }
+  .mobile-text { display: inline; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  #app .node-row .actions { display: none !important; }
+  #app .inline-note { display: none !important; }
+}
+
+/* Mobile Action Popup */
+.mobile-action-popup {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+  z-index: 1100;
+  padding: 16px 16px 24px;
+  animation: slideUpPopup 0.22s ease;
+}
+@keyframes slideUpPopup {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.mobile-action-popup .map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #334155;
+}
+.mobile-action-popup .map-header button {
+  background: none; border: none; font-size: 20px;
+  cursor: pointer; color: #94a3b8; padding: 0;
+}
+.mobile-action-popup .map-purpose {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: #f1f5f9;
+  border-left: 3px solid #6366f1;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.4;
+}
+.mobile-action-popup .map-purpose strong { color: #1e293b; }
+.mobile-action-popup .map-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 10px;
+}
+.mobile-action-popup .map-buttons button {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; padding: 12px 8px;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: 10px; cursor: pointer;
+  font-size: 11px; color: #475569; font-family: inherit;
+  transition: background 0.15s;
+}
+.mobile-action-popup .map-buttons button .map-icon { font-size: 22px; }
+.mobile-action-popup .map-buttons button:active { background: #e0e7ff; }
+.mobile-action-popup .map-buttons button.danger { color: #ef4444; border-color: #fecaca; background: #fff5f5; }
+.mobile-action-popup .map-buttons button.danger:active { background: #fee2e2; }
