@@ -32,37 +32,70 @@ window.TreeApp.zipLogic = {
   parseTextTree(text) {
     const rawLines = text.split('\n').map(l => l.replace(/\t/g, '    ').replace(/\r$/, ''));
     const lines = rawLines.filter(l => l.trim() !== '');
-    const root = [];
-    const stack = []; // { depth, node }
 
-    lines.forEach(line => {
+    // Pass 1: parse each line into { depth, name }
+    const items = [];
+    for (const line of lines) {
+      const trimmed = line.trim();
+      // Skip the root dot marker
+      if (trimmed === '.' || trimmed === './' || trimmed === '') continue;
+
       let rest = line;
       let depth = 0;
       while (true) {
-        if (rest.startsWith('│   ')) { rest = rest.slice(4); depth++; continue; }
-        if (rest.startsWith('    ')) { rest = rest.slice(4); depth++; continue; }
-        if (rest.startsWith('├── ')) { rest = rest.slice(4); depth++; break; }
-        if (rest.startsWith('└── ')) { rest = rest.slice(4); depth++; break; }
+        if (rest.startsWith('│   '))      { rest = rest.slice(4); depth++; continue; }
+        if (rest.startsWith('|   '))      { rest = rest.slice(4); depth++; continue; }
+        if (rest.startsWith('    '))      { rest = rest.slice(4); depth++; continue; }
+        if (rest.startsWith('│ '))        { rest = rest.slice(2); continue; } // thin variant
+        if (rest.startsWith('├── '))      { rest = rest.slice(4); break; }
+        if (rest.startsWith('└── '))      { rest = rest.slice(4); break; }
+        if (rest.startsWith('├─ '))       { rest = rest.slice(3); break; }
+        if (rest.startsWith('└─ '))       { rest = rest.slice(3); break; }
+        if (rest.startsWith('|-- '))      { rest = rest.slice(4); break; }
+        if (rest.startsWith('`-- '))      { rest = rest.slice(4); break; }
         break;
       }
       let name = rest.trim();
-      if (!name) return;
-      const isFolder = name.endsWith('/');
-      if (isFolder) name = name.slice(0, -1);
-      const node = { id: window.TreeApp.utils.uid(), name, type: isFolder ? 'folder' : (name === '.gitkeep' ? 'gitkeep' : 'file') };
+      // Strip trailing slash (we'll detect folder status by children)
+      const forcedFolder = name.endsWith('/');
+      if (forcedFolder) name = name.slice(0, -1);
+      // Strip inline comments
+      name = name.replace(/\s+#.*$/, '').trim();
+      if (!name) continue;
+
+      items.push({ depth, name, forcedFolder });
+    }
+
+    // Pass 2: build tree — a node is a folder if the NEXT item has depth > current depth
+    const root = [];
+    const stack = []; // { depth, node }
+
+    for (let i = 0; i < items.length; i++) {
+      const { depth, name, forcedFolder } = items[i];
+      const nextDepth = i + 1 < items.length ? items[i + 1].depth : -1;
+      const isFolder = forcedFolder || nextDepth > depth;
+
+      const node = {
+        id: window.TreeApp.utils.uid(),
+        name,
+        type: name === '.gitkeep' ? 'gitkeep' : (isFolder ? 'folder' : 'file')
+      };
       if (isFolder) node.children = [];
       if (node.type === 'gitkeep') node.note = '';
 
+      // Pop stack until we find the correct parent depth
       while (stack.length && stack[stack.length - 1].depth >= depth) stack.pop();
 
       if (stack.length === 0) root.push(node);
       else stack[stack.length - 1].node.children.push(node);
 
       if (isFolder) stack.push({ depth, node });
-    });
+    }
 
     return root;
   },
+
+
 
   async buildTreeFromZip(zip) {
     const root = [];
