@@ -16,9 +16,21 @@ window.TreeApp.lang.vi = {
   btn_undo: "↩️ Hoàn tác",
   btn_redo: "↪️ Làm lại",
   btn_collapse_all: "Thu gọn tất cả",
+  btn_import_zip: "Tải lên ZIP",
   btn_expand_all: "Mở rộng tất cả",
   btn_compact_gitkeep_desktop: "Ẩn/Hiện .gitkeep",
   btn_compact_gitkeep_mobile: "Ẩn gitkeep",
+  
+  // Share Modal
+  share_title: "Chia sẻ Template",
+  share_desc: "Bạn muốn tạo link chia sẻ bằng cách nào?",
+  share_gist_title: "🐙 Tạo bằng GitHub Gist (Siêu ngắn)",
+  share_gist_desc: "Yêu cầu GitHub Token. Link ngắn gọn, lưu trữ vĩnh viễn trên Gist.",
+  share_pure_title: "⚡ Tạo link nén thuần (Nhanh chóng)",
+  share_pure_desc: "Link dài hơn nhưng tạo ngay lập tức, không cần tài khoản hay kết nối mạng.",
+  prompt_gist_token: "Vui lòng nhập GitHub Personal Access Token (với quyền 'gist'):\n(Để trống nếu muốn hủy)",
+  
+  // Titles
   btn_import_toggle: "Nhập từ text",
   btn_upload_zip: "Tải ZIP lên",
   btn_export: "Xuất text",

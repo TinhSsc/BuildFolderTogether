@@ -281,21 +281,70 @@ window.TreeApp = window.TreeApp || {};
     }
   };
 
-  document.getElementById('shareTemplateBtn').onclick = async () => {
+  const shareModal = document.getElementById('shareModal');
+  document.getElementById('shareCancelBtn').onclick = () => { shareModal.style.display = 'none'; };
+
+  document.getElementById('shareTemplateBtn').onclick = () => {
     if (!state.tree || state.tree.length === 0) {
       utils.showStatus(window.TreeApp.i18n.t('export_empty') || 'Tree is empty');
       return;
     }
+    shareModal.style.display = 'block';
+  };
+
+  const copyAndToast = async (urlStr) => {
     try {
-      const encoded = window.TreeApp.share.encodeTree(state.tree);
-      const url = new URL(window.location.href);
-      url.searchParams.set('t', encoded);
-      
-      const finalUrl = url.toString();
-      await navigator.clipboard.writeText(finalUrl);
+      await navigator.clipboard.writeText(urlStr);
       utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Đã copy link chia sẻ vào bộ nhớ đệm!');
     } catch (e) {
       utils.showStatus('Failed to copy link: ' + e.message);
+    }
+    shareModal.style.display = 'none';
+  };
+
+  document.getElementById('sharePureBtn').onclick = async () => {
+    const url = new URL(window.location.href);
+    const encoded = window.TreeApp.share.encodeTree(state.tree);
+    url.searchParams.set('t', encoded);
+    await copyAndToast(url.toString());
+  };
+
+  document.getElementById('shareGistBtn').onclick = async () => {
+    let token = localStorage.getItem('github_gist_token');
+    if (!token) {
+      token = prompt(window.TreeApp.i18n.t('prompt_gist_token') || "Vui lòng nhập GitHub Personal Access Token (có quyền 'gist'):\n(Để trống nếu muốn hủy)");
+      if (!token) return;
+      localStorage.setItem('github_gist_token', token.trim());
+    }
+    
+    utils.showStatus("Đang tải lên GitHub Gist...");
+    try {
+      const res = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `token ${token.trim()}`
+        },
+        body: JSON.stringify({
+          description: "Tree Directory Template",
+          public: true,
+          files: {
+            "tree.json": { content: JSON.stringify(window.TreeApp.share.minifyKeys(state.tree)) }
+          }
+        })
+      });
+      
+      if (!res.ok) {
+        if (res.status === 401) localStorage.removeItem('github_gist_token');
+        throw new Error(`GitHub API Error: ${res.status}`);
+      }
+      
+      const data = await res.json();
+      const url = new URL(window.location.href);
+      url.searchParams.set('gist', data.id);
+      await copyAndToast(url.toString());
+    } catch (e) {
+      utils.showStatus('Lỗi tạo Gist: ' + e.message);
     }
   };
 
@@ -325,28 +374,54 @@ window.TreeApp = window.TreeApp || {};
     window.TreeApp.i18n.translateDOM();
     if (window.TreeApp.utils.updateStatusBar) window.TreeApp.utils.updateStatusBar();
     
-    let startRoomId = null;
-    let templateHash = null;
-    try {
-      const params = new URLSearchParams(window.location.search);
-      startRoomId = params.get('room');
-      templateHash = params.get('t');
-    } catch (e) { /* ignore */ }
-
-    if (templateHash) {
-      // Priority 1: Load template from URL
-      const loadedTree = window.TreeApp.share.decodeTree(templateHash);
-      if (loadedTree.length > 0) {
-        state.tree = loadedTree;
-        state.roomId = null;
-        elements.roomInput.value = '';
-        utils.updateShareLinkVisibility();
-        render.renderTree();
-        history.saveState();
-        utils.showStatus(window.TreeApp.i18n.t('toast_template_loaded') || 'Template loaded successfully!');
-      } else {
-        utils.showStatus('Invalid template link');
+    const params = new URLSearchParams(window.location.search);
+    const startRoomId = params.get('room');
+    
+    // Priority 1: Load from Gist if exists
+    if (params.has('gist')) {
+      const gistId = params.get('gist');
+      utils.showStatus("Đang tải template từ GitHub Gist...");
+      try {
+        const res = await fetch(`https://api.github.com/gists/${gistId}`);
+        if (!res.ok) throw new Error("Gist không tồn tại hoặc lỗi mạng");
+        const data = await res.json();
+        if (data.files && data.files['tree.json']) {
+          const fileData = data.files['tree.json'];
+          let jsonContent = fileData.content;
+          
+          if (fileData.truncated && fileData.raw_url) {
+            utils.showStatus("Dữ liệu lớn, đang tải file gốc...");
+            const rawRes = await fetch(fileData.raw_url);
+            if (!rawRes.ok) throw new Error("Lỗi khi tải file gốc từ Gist");
+            jsonContent = await rawRes.text();
+          }
+          
+          const parsed = JSON.parse(jsonContent);
+          const tree = window.TreeApp.share.expandKeys(parsed);
+          state.tree = tree;
+          history.saveState();
+          render.renderTree();
+          utils.showStatus("Tải template thành công!");
+        }
+        
+        // Clean up URL
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('gist');
+          window.history.replaceState({}, document.title, url.toString());
+        } catch(e) {}
+      } catch (err) {
+        utils.showStatus("Lỗi tải Gist: " + err.message);
       }
+    }
+    // Priority 2: Load template from 't' parameter
+    else if (params.has('t')) {
+      const tree = window.TreeApp.share.decodeTree(params.get('t'));
+      if (tree && tree.length > 0) {
+        state.tree = tree;
+        history.saveState();
+      }
+      render.renderTree();
       
       // Clean up URL
       try {
@@ -356,7 +431,7 @@ window.TreeApp = window.TreeApp || {};
       } catch(e) {}
     } 
     else if (startRoomId) {
-      // Priority 2: Join room
+      // Priority 3: Join room
       elements.roomInput.value = startRoomId;
       state.roomId = startRoomId;
       utils.updateShareLinkVisibility();
@@ -365,7 +440,7 @@ window.TreeApp = window.TreeApp || {};
       await room.becomeGuestAndConnect(startRoomId);
     } 
     else {
-      // Priority 3: Load local storage
+      // Priority 4: Load local storage
       await storage.load();
       render.renderTree();
     }

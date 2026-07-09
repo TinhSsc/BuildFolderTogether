@@ -66,5 +66,13 @@ window.TreeApp.i18n = {
     if (!window.TreeApp.state.roomId) {
       if(el('roomStatus')) el('roomStatus').textContent = this.t('room_status_offline');
     }
+
+    // Process elements with data-i18n attributes
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const key = element.getAttribute('data-i18n');
+      if (key) {
+        element.innerHTML = this.t(key);
+      }
+    });
   }
 };

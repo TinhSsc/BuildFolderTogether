@@ -16,9 +16,20 @@ window.TreeApp.lang.en = {
   btn_undo: "↩️ Undo",
   btn_redo: "↪️ Redo",
   btn_collapse_all: "Collapse All",
-  btn_expand_all: "Expand All",
+  btn_import_zip: "Import ZIP",
   btn_compact_gitkeep_desktop: "Toggle .gitkeep",
   btn_compact_gitkeep_mobile: "Hide gitkeep",
+  
+  // Share Modal
+  share_title: "Share Template",
+  share_desc: "How would you like to create the share link?",
+  share_gist_title: "🐙 GitHub Gist (Super short)",
+  share_gist_desc: "Requires GitHub Token. Short link, stored permanently on Gist.",
+  share_pure_title: "⚡ Pure Compressed Link (Fast)",
+  share_pure_desc: "Longer link but created instantly, requires no account or network.",
+  prompt_gist_token: "Please enter your GitHub Personal Access Token (with 'gist' scope):\n(Leave blank to cancel)",
+  
+  btn_expand_all: "Expand All",
   btn_import_toggle: "Import from text",
   btn_upload_zip: "Upload ZIP",
   btn_export: "Export text",
