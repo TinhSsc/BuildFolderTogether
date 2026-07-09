@@ -113,8 +113,26 @@ window.TreeApp = window.TreeApp || {};
   const aiApiKey = document.getElementById('aiApiKey');
   const aiPrompt = document.getElementById('aiPrompt');
   const aiKeySection = document.getElementById('aiKeySection');
+  const aiProvider = document.getElementById('aiProvider');
+  const aiLabelKey = document.getElementById('aiLabelKey');
+  const aiKeyHint = document.getElementById('aiKeyHint');
   
-  if(aiApiKey) { aiApiKey.value = window.TreeApp.ai.getApiKey(); }
+  if (aiProvider) {
+    aiProvider.value = window.TreeApp.ai.getProvider();
+    aiApiKey.value = window.TreeApp.ai.getApiKey(aiProvider.value);
+    
+    aiProvider.onchange = () => {
+      const p = aiProvider.value;
+      window.TreeApp.ai.setProvider(p);
+      aiApiKey.value = window.TreeApp.ai.getApiKey(p);
+      
+      if (p === 'gemini') { aiLabelKey.textContent = 'Gemini API Key:'; aiApiKey.placeholder = 'AIzaSy...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
+      else if (p === 'openai') { aiLabelKey.textContent = 'OpenAI API Key:'; aiApiKey.placeholder = 'sk-...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
+      else if (p === 'openrouter') { aiLabelKey.textContent = 'OpenRouter API Key:'; aiApiKey.placeholder = 'sk-or-v1-...'; aiApiKey.type = 'password'; aiKeyHint.textContent = 'Key is stored safely in your browser.'; }
+      else if (p === 'ollama') { aiLabelKey.textContent = 'Ollama Model Name (e.g. llama3):'; aiApiKey.placeholder = 'llama3'; aiApiKey.type = 'text'; aiKeyHint.textContent = 'Ensure Ollama is running on localhost:11434 with OLLAMA_ORIGINS="*".'; }
+    };
+    aiProvider.dispatchEvent(new Event('change'));
+  }
   
   document.getElementById('aiToggleBtn').onclick = () => { aiBox.style.display = aiBox.style.display === 'none' ? 'block' : 'none'; };
   document.getElementById('aiCancelBtn').onclick = () => { aiBox.style.display = 'none'; };
@@ -132,10 +150,11 @@ window.TreeApp = window.TreeApp || {};
   };
   
   document.getElementById('aiGenerateBtn').onclick = async () => {
+    const provider = aiProvider.value;
     const key = aiApiKey.value.trim();
     const prompt = aiPrompt.value.trim();
     
-    if (!key) { 
+    if (!key && provider !== 'ollama') { 
       utils.showStatus('API Key required'); 
       aiKeySection.style.display = 'block';
       aiApiKey.focus();
@@ -143,12 +162,12 @@ window.TreeApp = window.TreeApp || {};
     }
     if (!prompt) { utils.showStatus('Prompt required'); return; }
     
-    window.TreeApp.ai.setApiKey(key);
+    window.TreeApp.ai.setApiKey(provider, key);
     utils.showStatus('Generating with AI...');
     document.getElementById('aiGenerateBtn').disabled = true;
     
     try {
-      const asciiTree = await window.TreeApp.ai.generateTree(prompt, key);
+      const asciiTree = await window.TreeApp.ai.generateTree(prompt, key, provider);
       const parsedTree = window.TreeApp.zipLogic.parseTextTree(asciiTree);
       if (parsedTree && parsedTree.length > 0) {
         state.tree = parsedTree;
