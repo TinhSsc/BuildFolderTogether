@@ -348,6 +348,40 @@ window.TreeApp = window.TreeApp || {};
     }
   };
 
+  document.getElementById('shareVercelBtn').onclick = async () => {
+    utils.showStatus("Đang rút gọn link qua Vercel API...");
+    try {
+      const url = new URL(window.location.href);
+      const encoded = window.TreeApp.share.encodeTree(state.tree);
+      url.searchParams.set('t', encoded);
+      const fullUrl = url.toString();
+      
+      const res = await fetch('/api/shorten', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: fullUrl })
+      });
+      
+      const data = await res.json().catch(() => ({}));
+
+      if (res.status === 429) {
+        const retryAfter = data.retryAfter || 120;
+        const msg = (window.TreeApp.i18n.t('share_rate_limit') || 'Chỉ được rút gọn tối đa 3 lần trong 2 phút.')
+          + ` ${window.TreeApp.i18n.t('share_rate_limit_retry') || 'Thử lại sau'} ${retryAfter}s.`;
+        throw new Error(msg);
+      }
+
+      if (!res.ok) {
+        throw new Error(data.error || `Lỗi API: ${res.status} (Chưa cấu hình Vercel?)`);
+      }
+      if (!data.short) throw new Error("Không nhận được link rút gọn");
+      
+      await copyAndToast(data.short);
+    } catch (e) {
+      utils.showStatus('Lỗi: ' + e.message);
+    }
+  };
+
   document.getElementById('joinRoomBtn').onclick = async () => {
     const val = elements.roomInput.value.trim();
     if (!val) { utils.showStatus(window.TreeApp.i18n.t('room_need_id')); return; }

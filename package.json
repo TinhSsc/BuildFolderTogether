@@ -1,0 +1,24 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "<!-- Banner can be placed here if available -->",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TinhSsc/BuildFolderTogether.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/TinhSsc/BuildFolderTogether/issues"
+  },
+  "homepage": "https://github.com/TinhSsc/BuildFolderTogether#readme",
+  "dependencies": {
+    "@upstash/redis": "^1.38.0"
+  }
+}

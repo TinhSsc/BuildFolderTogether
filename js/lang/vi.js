@@ -24,10 +24,14 @@ window.TreeApp.lang.vi = {
   // Share Modal
   share_title: "Chia sẻ Template",
   share_desc: "Bạn muốn tạo link chia sẻ bằng cách nào?",
+  share_vercel_title: "🚀 Rút gọn bằng Vercel + Redis (Mới)",
+  share_vercel_desc: "Yêu cầu cấu hình API. Link cực ngắn thông qua cơ sở dữ liệu Upstash Redis.",
   share_gist_title: "🐙 Tạo bằng GitHub Gist (Siêu ngắn)",
   share_gist_desc: "Yêu cầu GitHub Token. Link ngắn gọn, lưu trữ vĩnh viễn trên Gist.",
   share_pure_title: "⚡ Tạo link nén thuần (Nhanh chóng)",
   share_pure_desc: "Link dài hơn nhưng tạo ngay lập tức, không cần tài khoản hay kết nối mạng.",
+  share_rate_limit: "Chỉ được rút gọn tối đa 3 lần trong 2 phút.",
+  share_rate_limit_retry: "Thử lại sau",
   prompt_gist_token: "Vui lòng nhập GitHub Personal Access Token (với quyền 'gist'):\n(Để trống nếu muốn hủy)",
   
   // Titles

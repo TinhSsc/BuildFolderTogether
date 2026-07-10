@@ -23,10 +23,14 @@ window.TreeApp.lang.en = {
   // Share Modal
   share_title: "Share Template",
   share_desc: "How would you like to create the share link?",
+  share_vercel_title: "🚀 Vercel + Redis (New)",
+  share_vercel_desc: "Requires API setup. Super short link via Upstash Redis database.",
   share_gist_title: "🐙 GitHub Gist (Super short)",
   share_gist_desc: "Requires GitHub Token. Short link, stored permanently on Gist.",
   share_pure_title: "⚡ Pure Compressed Link (Fast)",
   share_pure_desc: "Longer link but created instantly, requires no account or network.",
+  share_rate_limit: "You can only shorten links 3 times within 2 minutes.",
+  share_rate_limit_retry: "Try again in",
   prompt_gist_token: "Please enter your GitHub Personal Access Token (with 'gist' scope):\n(Leave blank to cancel)",
   
   btn_expand_all: "Expand All",
