@@ -351,15 +351,13 @@ window.TreeApp = window.TreeApp || {};
   document.getElementById('shareVercelBtn').onclick = async () => {
     utils.showStatus("Đang rút gọn link qua Vercel API...");
     try {
-      const url = new URL(window.location.href);
       const encoded = window.TreeApp.share.encodeTree(state.tree);
-      url.searchParams.set('t', encoded);
-      const fullUrl = url.toString();
-      
+      if (!encoded) throw new Error("Không thể mã hóa dữ liệu cây thư mục");
+
       const res = await fetch('/api/shorten', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: fullUrl })
+        body: JSON.stringify({ t: encoded })
       });
       
       const data = await res.json().catch(() => ({}));
@@ -448,7 +446,36 @@ window.TreeApp = window.TreeApp || {};
         utils.showStatus("Lỗi tải Gist: " + err.message);
       }
     }
-    // Priority 2: Load template from 't' parameter
+    // Priority 2: Load template from short link (?load=id)
+    else if (params.has('load')) {
+      const loadId = params.get('load');
+      utils.showStatus("Đang tải template từ link rút gọn...");
+      try {
+        const res = await fetch(`/api/${encodeURIComponent(loadId)}?format=json`);
+        if (!res.ok) throw new Error("Link rút gọn không tồn tại hoặc đã hết hạn");
+        const data = await res.json();
+        const tree = window.TreeApp.share.decodeTree(data.t);
+        if (tree && tree.length > 0) {
+          state.tree = tree;
+          history.saveState();
+          utils.showStatus("Tải template thành công!");
+        } else {
+          throw new Error("Không thể giải mã dữ liệu template");
+        }
+        render.renderTree();
+
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('load');
+          window.history.replaceState({}, document.title, url.toString());
+        } catch (e) {}
+      } catch (err) {
+        utils.showStatus("Lỗi tải link rút gọn: " + err.message);
+        await storage.load();
+        render.renderTree();
+      }
+    }
+    // Priority 3: Load template from 't' parameter
     else if (params.has('t')) {
       const tree = window.TreeApp.share.decodeTree(params.get('t'));
       if (tree && tree.length > 0) {
@@ -465,7 +492,7 @@ window.TreeApp = window.TreeApp || {};
       } catch(e) {}
     } 
     else if (startRoomId) {
-      // Priority 3: Join room
+      // Priority 4: Join room
       elements.roomInput.value = startRoomId;
       state.roomId = startRoomId;
       utils.updateShareLinkVisibility();
@@ -474,7 +501,7 @@ window.TreeApp = window.TreeApp || {};
       await room.becomeGuestAndConnect(startRoomId);
     } 
     else {
-      // Priority 4: Load local storage
+      // Priority 5: Load local storage
       await storage.load();
       render.renderTree();
     }

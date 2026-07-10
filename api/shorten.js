@@ -23,24 +23,35 @@ async function checkRateLimit(ip) {
   return { limited: false };
 }
 
-export default async function handler(req, res) {
-  // Config CORS for frontend domains (or allow all since it's an API)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+function extractEncodedTree(body) {
+  if (body.t) return body.t;
+  if (body.url) {
+    try {
+      return new URL(body.url).searchParams.get("t");
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
 
-  if (req.method === 'OPTIONS') {
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { url } = req.body;
-    if (!url) {
-      return res.status(400).json({ error: 'Missing url parameter' });
+    const encoded = extractEncodedTree(req.body || {});
+    if (!encoded) {
+      return res.status(400).json({ error: "Missing t parameter or url with ?t=" });
     }
 
     const ip = getClientIp(req);
@@ -54,18 +65,15 @@ export default async function handler(req, res) {
     }
 
     const id = Math.random().toString(36).slice(2, 8);
-    
-    // Store in Redis (expiration optional, e.g., EX: 60*60*24*30 for 30 days)
-    await redis.set(id, url);
+    await redis.set(id, encoded);
 
-    // Get the base URL from the request host
     const host = req.headers.host;
-    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const protocol = host.includes("localhost") ? "http" : "https";
     const baseUrl = `${protocol}://${host}`;
 
     res.json({ short: `${baseUrl}/api/${id}` });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }
