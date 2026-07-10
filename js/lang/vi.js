@@ -127,6 +127,7 @@ window.TreeApp.lang.vi = {
   toast_template_loaded: "Đã tải cấu trúc mẫu thành công!",
   creating_link: "Đang tạo link rút gọn...",
   link_copied_short: "Đã chép link rút gọn!",
+  link_expires: " (Tự động xoá sau 7 ngày)",
   
   popup_add_folder: "Thêm Folder",
   popup_add_file: "Thêm File",

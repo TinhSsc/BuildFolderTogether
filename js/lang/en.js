@@ -126,6 +126,7 @@ window.TreeApp.lang.en = {
   toast_template_loaded: "Template loaded successfully!",
   creating_link: "Creating short link...",
   link_copied_short: "Copied short link!",
+  link_expires: " (Expires in 7 days)",
   
   popup_add_folder: "Add Folder",
   popup_add_file: "Add File",

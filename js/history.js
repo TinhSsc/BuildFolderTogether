@@ -9,6 +9,13 @@ window.TreeApp.history = {
     state.redoStack = [];
   },
 
+  saveState() {
+    window.TreeApp.storage.save();
+    if (window.TreeApp.room && window.TreeApp.room.broadcastTreeChange) {
+      window.TreeApp.room.broadcastTreeChange();
+    }
+  },
+
   mutate(fn) {
     this.pushHistory();
     fn();

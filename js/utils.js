@@ -15,9 +15,15 @@ window.TreeApp.utils = {
   showStatus(msg) {
     const statusEl = window.TreeApp.elements.statusEl;
     statusEl.textContent = msg;
-    setTimeout(() => {
-      if (statusEl.textContent === msg) statusEl.textContent = '';
-    }, 1500);
+    statusEl.classList.add('show');
+    
+    if (this._statusTimeout) {
+      clearTimeout(this._statusTimeout);
+    }
+    
+    this._statusTimeout = setTimeout(() => {
+      statusEl.classList.remove('show');
+    }, 2500);
   },
 
   updateShareLinkVisibility() {

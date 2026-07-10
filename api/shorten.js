@@ -65,7 +65,7 @@ export default async function handler(req, res) {
     }
 
     const id = Math.random().toString(36).slice(2, 8);
-    await redis.set(id, encoded);
+    await redis.set(id, encoded, { ex: 604800 });
 
     const host = req.headers.host;
     const protocol = host.includes("localhost") ? "http" : "https";

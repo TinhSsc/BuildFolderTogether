@@ -281,74 +281,12 @@ window.TreeApp = window.TreeApp || {};
     }
   };
 
-  const shareModal = document.getElementById('shareModal');
-  document.getElementById('shareCancelBtn').onclick = () => { shareModal.style.display = 'none'; };
-
-  document.getElementById('shareTemplateBtn').onclick = () => {
+  document.getElementById('shareTemplateBtn').onclick = async () => {
     if (!state.tree || state.tree.length === 0) {
       utils.showStatus(window.TreeApp.i18n.t('export_empty') || 'Tree is empty');
       return;
     }
-    shareModal.style.display = 'block';
-  };
 
-  const copyAndToast = async (urlStr) => {
-    try {
-      await navigator.clipboard.writeText(urlStr);
-      utils.showStatus(window.TreeApp.i18n.t('toast_copy_link') || 'Đã copy link chia sẻ vào bộ nhớ đệm!');
-    } catch (e) {
-      utils.showStatus('Failed to copy link: ' + e.message);
-    }
-    shareModal.style.display = 'none';
-  };
-
-  document.getElementById('sharePureBtn').onclick = async () => {
-    const url = new URL(window.location.href);
-    const encoded = window.TreeApp.share.encodeTree(state.tree);
-    url.searchParams.set('t', encoded);
-    await copyAndToast(url.toString());
-  };
-
-  document.getElementById('shareGistBtn').onclick = async () => {
-    let token = localStorage.getItem('github_gist_token');
-    if (!token) {
-      token = prompt(window.TreeApp.i18n.t('prompt_gist_token') || "Vui lòng nhập GitHub Personal Access Token (có quyền 'gist'):\n(Để trống nếu muốn hủy)");
-      if (!token) return;
-      localStorage.setItem('github_gist_token', token.trim());
-    }
-    
-    utils.showStatus("Đang tải lên GitHub Gist...");
-    try {
-      const res = await fetch('https://api.github.com/gists', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/vnd.github.v3+json',
-          'Authorization': `token ${token.trim()}`
-        },
-        body: JSON.stringify({
-          description: "Tree Directory Template",
-          public: true,
-          files: {
-            "tree.json": { content: JSON.stringify(window.TreeApp.share.minifyKeys(state.tree)) }
-          }
-        })
-      });
-      
-      if (!res.ok) {
-        if (res.status === 401) localStorage.removeItem('github_gist_token');
-        throw new Error(`GitHub API Error: ${res.status}`);
-      }
-      
-      const data = await res.json();
-      const url = new URL(window.location.href);
-      url.searchParams.set('gist', data.id);
-      await copyAndToast(url.toString());
-    } catch (e) {
-      utils.showStatus('Lỗi tạo Gist: ' + e.message);
-    }
-  };
-
-  document.getElementById('shareVercelBtn').onclick = async () => {
     utils.showStatus("Đang rút gọn link qua Vercel API...");
     try {
       const encoded = window.TreeApp.share.encodeTree(state.tree);
@@ -374,7 +312,10 @@ window.TreeApp = window.TreeApp || {};
       }
       if (!data.short) throw new Error("Không nhận được link rút gọn");
       
-      await copyAndToast(data.short);
+      await navigator.clipboard.writeText(data.short);
+      const baseMsg = window.TreeApp.i18n.t('toast_copy_link') || 'Đã copy link chia sẻ vào bộ nhớ đệm!';
+      const expiresMsg = window.TreeApp.i18n.t('link_expires') || ' (Tự động xoá sau 7 ngày)';
+      utils.showStatus(baseMsg + expiresMsg);
     } catch (e) {
       utils.showStatus('Lỗi: ' + e.message);
     }
